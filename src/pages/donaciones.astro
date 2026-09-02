@@ -1,0 +1,137 @@
+---
+import Base from '../layouts/Base.astro';
+import Portada from '../components/Portada.astro';
+import { pagos, site } from '../site.config';
+---
+
+<Base titulo="Donaciones" descripcion="Apoya a la asociación cultural de Otero de Sanabria con una donación por Bizum, tarjeta o transferencia.">
+  <Portada
+    titulo="Echa una mano"
+    entradilla="La asociación se sostiene con las cuotas, la barra de las fiestas y lo que cada uno aporta. Todo lo que entra se gasta en el pueblo."
+  />
+
+  <section class="seccion formas">
+    <div class="contenedor rejilla">
+      <div class="forma bizum">
+        <h2>Bizum</h2>
+        <p>La forma más rápida si estás en España. Sin comisiones para la asociación.</p>
+        <p class="dato">{pagos.bizum}</p>
+        <p class="nota">Pon en el concepto «Donación» y, si quieres, tu nombre para agradecértelo.</p>
+      </div>
+
+      <div class="forma tarjeta">
+        <h2>Con tarjeta</h2>
+        <p>Desde cualquier país, con tarjeta, Apple Pay o Google Pay. Eliges el importe.</p>
+        <a class="btn btn-primario" href={pagos.donacionStripe} target="_blank" rel="noopener">Donar con tarjeta</a>
+        <p class="nota">Pago seguro a través de Stripe. La asociación asume la comisión.</p>
+      </div>
+
+      <div class="forma transferencia">
+        <h2>Transferencia</h2>
+        <p>Para donaciones grandes o si prefieres hacerlo desde tu banco.</p>
+        <p class="dato dato-iban">{pagos.iban}</p>
+        <p class="nota">Titular: {pagos.titular}. Concepto: «Donación».</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion seccion-suave">
+    <div class="contenedor estrecho">
+      <h2>A dónde va el dinero</h2>
+      <p>
+        Cada año la asamblea de socios aprueba en qué se gasta. Lo habitual: la orquesta y el resto de las fiestas de Los Remedios,
+        la paellada, los juegos de los peques, las herramientas para las jornadas de limpieza y pequeñas reparaciones en la fuente,
+        el lavadero y el local.
+      </p>
+      <p>
+        Las cuentas se presentan en la asamblea anual y cualquier socio puede pedirlas por correo en
+        <a href={`mailto:${site.email}`}>{site.email}</a>.
+      </p>
+      <p>
+        Si prefieres apoyar de forma estable, <a href="/socios/">hacerte socio</a> ayuda más que una donación puntual: nos permite planificar el año.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .formas {
+    padding-top: 1rem;
+  }
+
+  .rejilla {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .forma {
+    border-radius: var(--radio);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .forma h2 {
+    font-size: var(--t-lg);
+  }
+
+  .forma > p:first-of-type {
+    flex: 1;
+  }
+
+  .forma .btn {
+    align-self: flex-start;
+    margin-bottom: 0.75rem;
+  }
+
+  .dato {
+    font-size: var(--t-xl);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--tinta);
+    margin-bottom: 0.5rem;
+    user-select: all;
+  }
+
+  .dato-iban {
+    font-size: var(--t-md);
+    word-break: break-all;
+  }
+
+  .nota {
+    font-size: var(--t-sm);
+    color: var(--texto-suave);
+    margin: 0;
+  }
+
+  .bizum {
+    background: #e9f7f0;
+  }
+
+  .bizum h2 {
+    color: var(--verde);
+  }
+
+  .tarjeta {
+    background: #fdeaf1;
+  }
+
+  .tarjeta h2 {
+    color: var(--fucsia);
+  }
+
+  .transferencia {
+    background: var(--fondo-suave);
+  }
+
+  .transferencia h2 {
+    color: var(--azul);
+  }
+
+  @media (max-width: 900px) {
+    .rejilla {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,35 @@
+---
+/** Cabecera de las páginas interiores: título grande y una entradilla. */
+interface Props {
+  titulo: string;
+  entradilla?: string;
+}
+const { titulo, entradilla } = Astro.props;
+---
+
+<div class="portada">
+  <div class="contenedor">
+    <h1>{titulo}</h1>
+    {entradilla && <p>{entradilla}</p>}
+  </div>
+</div>
+
+<style>
+  .portada {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(1rem, 3vw, 2rem);
+  }
+
+  .portada h1 {
+    font-size: clamp(2.5rem, 6vw, 4.25rem);
+    letter-spacing: -0.035em;
+    color: var(--azul);
+    margin-bottom: 0.75rem;
+  }
+
+  .portada p {
+    font-size: var(--t-md);
+    color: var(--texto-suave);
+    max-width: 52ch;
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,144 @@
+---
+import Base from '../layouts/Base.astro';
+import Portada from '../components/Portada.astro';
+import Redes from '../components/Redes.astro';
+import { site } from '../site.config';
+
+// CAMBIAR: la junta actual. Deja solo los cargos que existan.
+const junta = [
+  { cargo: 'Presidencia', nombre: 'Nombre Apellido' },
+  { cargo: 'Vicepresidencia', nombre: 'Nombre Apellido' },
+  { cargo: 'Secretaría', nombre: 'Nombre Apellido' },
+  { cargo: 'Tesorería', nombre: 'Nombre Apellido' },
+  { cargo: 'Vocalías', nombre: 'Nombre, Nombre y Nombre' },
+];
+---
+
+<Base titulo="La asociación" descripcion={`Quiénes somos y qué hacemos en la ${site.nombreLargo}, ${site.pueblo}.`}>
+  <Portada
+    titulo="La asociación"
+    entradilla={`Somos vecinos e hijos del pueblo que nos juntamos para que ${site.pueblo} tenga fiestas, actividades y a alguien que se ocupe de lo común.`}
+  />
+
+  <section class="seccion quienes">
+    <div class="contenedor dos">
+      <div class="prosa">
+        <h2>Quiénes somos</h2>
+        <p>
+          La {site.nombreLargo} nació en {site.fundacion}, cuando un grupo de vecinos decidió que las fiestas de la Virgen de los Remedios no podían depender de que alguien se acordara de llamar a la orquesta. Desde entonces hemos ido a más: hoy organizamos las fiestas de agosto, las jornadas de limpieza de la fuente y el lavadero, la paellada, los juegos de los peques y lo que surja cada año.
+        </p>
+        <p>
+          Nos financiamos con las cuotas de los socios, la barra de las fiestas, la venta de camisetas y las donaciones. No tenemos nadie a sueldo: todo el trabajo lo hacemos entre los socios en nuestro tiempo libre.
+        </p>
+        <p>
+          El nombre viene de la patrona del pueblo, Nuestra Señora de los Remedios, cuya fiesta se celebra el fin de semana grande de agosto.
+        </p>
+      </div>
+
+      <aside class="junta">
+        <h2>La junta</h2>
+        <dl>
+          {junta.map((j) => (
+            <div>
+              <dt>{j.cargo}</dt>
+              <dd>{j.nombre}</dd>
+            </div>
+          ))}
+        </dl>
+        <p class="meta">La junta se renueva en la asamblea anual de socios.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="seccion seccion-suave">
+    <div class="contenedor tres">
+      <div>
+        <h2>Contacto</h2>
+        <p>
+          <a href={`mailto:${site.email}`}>{site.email}</a><br />
+          Local de la asociación, {site.pueblo}, {site.comarca}.
+        </p>
+      </div>
+      <div>
+        <h2>Redes</h2>
+        <p>Avisos rápidos por el canal de WhatsApp, fotos en Instagram y Facebook.</p>
+        <Redes class="redes-oscuras" />
+      </div>
+      <div>
+        <h2>Documentos</h2>
+        <p>
+          Los estatutos, las actas y las cuentas están a disposición de cualquier socio. Pídelos por correo y te los mandamos.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .quienes {
+    padding-top: 1rem;
+  }
+
+  .dos {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .junta {
+    background: var(--azul);
+    color: #fff;
+    padding: 2rem;
+    border-radius: var(--radio);
+  }
+
+  .junta h2 {
+    color: #fff;
+  }
+
+  .junta dl {
+    margin: 0 0 1rem;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .junta dt {
+    font-size: var(--t-sm);
+    opacity: 0.8;
+  }
+
+  .junta dd {
+    margin: 0;
+    font-weight: 700;
+    font-size: var(--t-md);
+  }
+
+  .junta .meta {
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0;
+  }
+
+  .tres {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+
+  .tres p {
+    color: var(--texto-suave);
+  }
+
+  .tres :global(.redes-oscuras a) {
+    background: var(--tinta);
+    color: #fff;
+  }
+
+  @media (max-width: 860px) {
+    .dos,
+    .tres {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>

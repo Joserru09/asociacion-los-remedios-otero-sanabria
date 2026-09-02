@@ -1,0 +1,103 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import { fechaLarga, iso } from '../../utils/fecha';
+import { site } from '../../site.config';
+
+export async function getStaticPaths() {
+  const noticias = await getCollection('noticias');
+  return noticias.map((n) => ({ params: { id: n.id }, props: { noticia: n } }));
+}
+
+const { noticia } = Astro.props;
+const { Content } = await render(noticia);
+const { titulo, fecha, resumen, imagen } = noticia.data;
+const og = imagen ? new URL(imagen.src, site.url).toString() : undefined;
+---
+
+<Base titulo={titulo} descripcion={resumen} imagen={og}>
+  <article class="seccion articulo">
+    <div class="contenedor">
+      <header class="cabecera">
+        <a href="/novedades/" class="volver">Volver al tablón</a>
+        <time datetime={iso(fecha)} class="meta">{fechaLarga(fecha)}</time>
+        <h1>{titulo}</h1>
+        <p class="entradilla">{resumen}</p>
+      </header>
+      {imagen && (
+        <Image src={imagen} alt="" width={1400} height={900} class="portada-foto" loading="eager" />
+      )}
+      <div class="prosa">
+        <Content />
+      </div>
+      <footer class="compartir">
+        <p>¿Te ha servido? Pásaselo a quien no lo haya visto.</p>
+        <a
+          class="btn btn-secundario"
+          href={`https://wa.me/?text=${encodeURIComponent(`${titulo} ${new URL(Astro.url.pathname, site.url)}`)}`}
+          target="_blank"
+          rel="noopener"
+        >Compartir por WhatsApp</a>
+      </footer>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .articulo {
+    padding-top: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .cabecera {
+    max-width: var(--ancho-texto);
+    margin-bottom: 2rem;
+  }
+
+  .volver {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+  }
+
+  .cabecera .meta {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .cabecera h1 {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    color: var(--tinta);
+  }
+
+  .entradilla {
+    font-size: var(--t-md);
+    color: var(--texto-suave);
+  }
+
+  .portada-foto {
+    width: 100%;
+    height: auto;
+    max-height: 32rem;
+    object-fit: cover;
+    border-radius: var(--radio);
+    margin-bottom: 2.5rem;
+  }
+
+  .compartir {
+    max-width: var(--ancho-texto);
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--linea);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .compartir p {
+    margin: 0;
+    color: var(--texto-suave);
+  }
+</style>

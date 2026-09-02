@@ -1,0 +1,163 @@
+---
+import Base from '../layouts/Base.astro';
+import Portada from '../components/Portada.astro';
+import { pagos, site } from '../site.config';
+import { euros } from '../utils/fecha';
+---
+
+<Base titulo="Hazte socio" descripcion={`Hazte socio de la ${site.nombreLargo} por ${euros(pagos.cuotaSocioEuros)} al año.`}>
+  <Portada
+    titulo="Hazte socio"
+    entradilla="Ser socio es la manera de que el pueblo siga teniendo fiestas, actividades y a alguien que cuide de lo común. Cuesta menos que una cena."
+  />
+
+  <section class="seccion pasos-seccion">
+    <div class="contenedor dos">
+      <div>
+        <h2>Qué supone</h2>
+        <ul class="ventajas">
+          <li>Voz y voto en la asamblea anual: decides en qué se gasta el dinero.</li>
+          <li>Prioridad para apuntarse a la paellada y a las actividades con plazas limitadas.</li>
+          <li>Descuento en la tienda cuando lo anunciamos en las fiestas.</li>
+          <li>Recibir el acta y las cuentas de la asociación.</li>
+        </ul>
+        <p class="cuota">
+          <span>Cuota anual</span>
+          <strong>{euros(pagos.cuotaSocioEuros)}</strong>
+        </p>
+      </div>
+
+      <div class="pasos">
+        <h2>Cómo hacerse socio</h2>
+        <ol>
+          <li>
+            <strong>Paga la cuota.</strong> Con tarjeta desde aquí o por Bizum al {pagos.bizum} con el concepto «Socio» y tu nombre.
+            <div class="acciones">
+              <a class="btn btn-primario" href={pagos.cuotaSocioStripe} target="_blank" rel="noopener">Pagar la cuota con tarjeta</a>
+            </div>
+          </li>
+          <li>
+            <strong>Dinos quién eres.</strong>
+            {pagos.formularioSocio ? (
+              <>
+                Rellena <a href={pagos.formularioSocio} target="_blank" rel="noopener">el formulario de alta</a> con tu nombre, teléfono y correo.
+              </>
+            ) : (
+              <>
+                Escríbenos a <a href={`mailto:${site.email}?subject=Alta%20de%20socio`}>{site.email}</a> con tu nombre, teléfono y correo.
+              </>
+            )}
+          </li>
+          <li>
+            <strong>Listo.</strong> Te confirmamos el alta y te avisamos de la próxima asamblea. La cuota se renueva cada año en primavera.
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion seccion-suave">
+    <div class="contenedor estrecho">
+      <h2>¿Ya eres socio?</h2>
+      <p>
+        Renueva la cuota de este año con el mismo botón o por Bizum. Si has cambiado de teléfono o de correo, dínoslo para que te sigan llegando los avisos.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .pasos-seccion {
+    padding-top: 1rem;
+  }
+
+  .dos {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .ventajas {
+    padding-left: 1.3em;
+    margin-bottom: 2rem;
+  }
+
+  .ventajas li {
+    margin-bottom: 0.6em;
+  }
+
+  .ventajas li::marker {
+    color: var(--verde);
+  }
+
+  .cuota {
+    display: inline-flex;
+    flex-direction: column;
+    background: var(--verde);
+    color: #fff;
+    padding: 1.25rem 1.75rem;
+    border-radius: var(--radio);
+    margin: 0;
+  }
+
+  .cuota span {
+    font-size: var(--t-sm);
+    opacity: 0.9;
+  }
+
+  .cuota strong {
+    font-size: var(--t-xl);
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .pasos ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: paso;
+  }
+
+  .pasos li {
+    counter-increment: paso;
+    position: relative;
+    padding-left: 3.5rem;
+    padding-bottom: 1.75rem;
+  }
+
+  .pasos li::before {
+    content: counter(paso);
+    position: absolute;
+    left: 0;
+    top: -0.2rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--amarillo);
+    color: var(--tinta);
+    font-weight: 800;
+    display: grid;
+    place-items: center;
+  }
+
+  .pasos li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 1.2rem;
+    top: 2.4rem;
+    bottom: 0.2rem;
+    border-left: 2px dashed var(--linea);
+  }
+
+  .acciones {
+    margin-top: 0.75rem;
+  }
+
+  @media (max-width: 800px) {
+    .dos {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>

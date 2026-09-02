@@ -1,0 +1,21 @@
+# Comprueba que la web construye antes de mezclar cambios.
+# El despliegue lo hace Cloudflare Pages directamente desde GitHub; este workflow solo valida.
+name: Comprobar build
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - run: npx astro check
+      - run: npm run build

@@ -1,0 +1,101 @@
+---
+import { site, menu } from '../site.config';
+import Redes from './Redes.astro';
+const año = new Date().getFullYear();
+---
+
+<footer class="pie">
+  <div class="contenedor pie-grid">
+    <div>
+      <p class="pie-nombre">{site.nombreLargo}</p>
+      <p class="pie-lugar">{site.pueblo}, {site.comarca}</p>
+      <a class="pie-mail" href={`mailto:${site.email}`}>{site.email}</a>
+    </div>
+    <nav aria-label="Pie de página">
+      <ul>
+        {menu.map((m) => (
+          <li><a href={m.href}>{m.label}</a></li>
+        ))}
+        <li><a href="/donaciones/">Donar</a></li>
+        <li><a href="/rss.xml">Novedades por RSS</a></li>
+      </ul>
+    </nav>
+    <div class="pie-redes">
+      <p>Síguenos</p>
+      <Redes />
+    </div>
+  </div>
+  <div class="contenedor pie-legal">
+    <p>© {site.fundacion}–{año} {site.nombreLargo}. Web hecha por gente del pueblo.</p>
+  </div>
+</footer>
+
+<style>
+  .pie {
+    background: var(--tinta);
+    color: #d7deeb;
+    margin-top: auto;
+  }
+
+  .pie a {
+    color: #fff;
+  }
+
+  .pie a:hover {
+    color: var(--amarillo);
+  }
+
+  .pie-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 2rem;
+    padding-block: 3rem 2rem;
+  }
+
+  .pie-nombre {
+    color: #fff;
+    font-weight: 800;
+    font-size: var(--t-md);
+    margin-bottom: 0.25rem;
+  }
+
+  .pie-lugar {
+    margin-bottom: 0.75rem;
+  }
+
+  .pie nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .pie nav a {
+    text-decoration: none;
+  }
+
+  .pie nav a:hover {
+    text-decoration: underline;
+  }
+
+  .pie-redes p {
+    margin-bottom: 0.75rem;
+  }
+
+  .pie-legal {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding-block: 1.25rem;
+    font-size: var(--t-sm);
+  }
+
+  .pie-legal p {
+    margin: 0;
+  }
+
+  @media (max-width: 720px) {
+    .pie-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

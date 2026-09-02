@@ -1,0 +1,81 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Portada from '../components/Portada.astro';
+import { galeria } from '../data/galeria';
+import { redes } from '../site.config';
+
+const fotos = import.meta.glob<{ default: ImageMetadata }>('../assets/galeria/*.{jpg,jpeg,png,webp}', {
+  eager: true,
+});
+
+const lista = galeria.map((g) => {
+  const mod = fotos[`../assets/galeria/${g.fichero}`];
+  if (!mod) throw new Error(`Falta la foto src/assets/galeria/${g.fichero} declarada en src/data/galeria.ts`);
+  return { ...g, src: mod.default };
+});
+---
+
+<Base titulo="Galería" descripcion="Fotos de Otero de Sanabria: fiestas, paisajes y gente del pueblo.">
+  <Portada
+    titulo="Fotos"
+    entradilla="Fiestas, prados, nevadas y lo que da de sí el pueblo cada año. Si tienes fotos buenas, mándanoslas y las subimos con tu nombre."
+  />
+  <section class="seccion galeria">
+    <div class="contenedor">
+      <div class="mosaico">
+        {lista.map((f) => (
+          <figure>
+            <a href={f.src.src} target="_blank" rel="noopener" aria-label={`Abrir la foto: ${f.pie}`}>
+              <Image src={f.src} alt={f.pie} width={900} widths={[480, 900]} sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 33vw" loading="lazy" />
+            </a>
+            <figcaption>{f.pie}</figcaption>
+          </figure>
+        ))}
+      </div>
+      {redes.instagram && (
+        <p class="mas">
+          Las fotos del día a día están en <a href={redes.instagram} target="_blank" rel="noopener">Instagram</a>.
+        </p>
+      )}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .galeria {
+    padding-top: 1rem;
+  }
+
+  .mosaico {
+    columns: 3 18rem;
+    column-gap: 1.25rem;
+  }
+
+  figure {
+    margin: 0 0 1.25rem;
+    break-inside: avoid;
+  }
+
+  figure a {
+    display: block;
+    border-radius: var(--radio);
+    overflow: hidden;
+  }
+
+  figure img {
+    width: 100%;
+    height: auto;
+  }
+
+  figcaption {
+    margin-top: 0.5rem;
+    color: var(--texto-suave);
+    font-size: var(--t-sm);
+  }
+
+  .mas {
+    margin-top: 2rem;
+    color: var(--texto-suave);
+  }
+</style>

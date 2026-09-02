@@ -1,0 +1,83 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Portada from '../../components/Portada.astro';
+import NoticiaItem from '../../components/NoticiaItem.astro';
+
+const noticias = (await getCollection('noticias')).sort(
+  (a, b) => b.data.fecha.getTime() - a.data.fecha.getTime(),
+);
+
+// Agrupamos por año para que el tablón no sea una lista infinita
+const porAño = new Map<number, typeof noticias>();
+for (const n of noticias) {
+  const y = n.data.fecha.getFullYear();
+  porAño.set(y, [...(porAño.get(y) ?? []), n]);
+}
+---
+
+<Base titulo="Novedades" descripcion="Tablón de novedades de la asociación: fiestas, actividades, asambleas y avisos.">
+  <Portada
+    titulo="Tablón de novedades"
+    entradilla="Todo lo que pasa en el pueblo y en la asociación. Lo mismo que mandamos por el canal de WhatsApp, pero ordenado y sin perderse."
+  />
+  <section class="seccion tablon">
+    <div class="contenedor">
+      {noticias.length === 0 && (
+        <p class="vacio">Todavía no hay novedades publicadas. La primera aparecerá aquí.</p>
+      )}
+      {[...porAño.entries()].map(([año, lista]) => (
+        <div class="año">
+          <h2>{año}</h2>
+          <div>
+            {lista.map((n) => <NoticiaItem noticia={n} />)}
+          </div>
+        </div>
+      ))}
+      <p class="rss">
+        ¿Prefieres que te avisemos? <a href="/rss.xml">Suscríbete por RSS</a> o sigue el canal de WhatsApp.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tablon {
+    padding-top: 1rem;
+  }
+
+  .año {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .año h2 {
+    font-size: var(--t-xl);
+    color: var(--linea);
+    letter-spacing: -0.04em;
+    position: sticky;
+    top: 1rem;
+    align-self: start;
+  }
+
+  .vacio,
+  .rss {
+    color: var(--texto-suave);
+  }
+
+  @media (max-width: 720px) {
+    .año {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .año h2 {
+      position: static;
+      color: var(--texto-suave);
+      font-size: var(--t-lg);
+      margin-bottom: 0;
+    }
+  }
+</style>

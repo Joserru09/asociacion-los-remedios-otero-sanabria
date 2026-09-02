@@ -1,0 +1,349 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import NoticiaItem from '../components/NoticiaItem.astro';
+import ProductoCard from '../components/ProductoCard.astro';
+import Redes from '../components/Redes.astro';
+import { site, pagos, redesActivas } from '../site.config';
+import { galeria } from '../data/galeria';
+import { euros } from '../utils/fecha';
+import hero from '../assets/hero.jpg';
+
+const noticias = (await getCollection('noticias')).sort(
+  (a, b) => b.data.fecha.getTime() - a.data.fecha.getTime(),
+);
+const destacada = noticias.find((n) => n.data.destacada) ?? noticias[0];
+const ultimas = noticias.slice(0, 3);
+
+const productos = (await getCollection('productos'))
+  .filter((p) => !p.data.agotado)
+  .sort((a, b) => a.data.orden - b.data.orden)
+  .slice(0, 3);
+
+const fotos = import.meta.glob<{ default: ImageMetadata }>('../assets/galeria/*.{jpg,jpeg,png,webp}', {
+  eager: true,
+});
+const muestra = galeria.slice(0, 4).map((g) => ({
+  ...g,
+  src: fotos[`../assets/galeria/${g.fichero}`].default,
+}));
+---
+
+<Base titulo={site.nombre}>
+  <section class="hero">
+    <div class="contenedor hero-grid">
+      <div class="hero-texto">
+        <h1>Otero de<br />Sanabria</h1>
+        <p class="hero-sub">
+          La asociación cultural del pueblo. Organizamos las fiestas, cuidamos lo que es de todos y
+          contamos aquí lo que pasa para que te enteres aunque vivas lejos.
+        </p>
+        <div class="hero-acciones">
+          <a class="btn btn-primario" href="/novedades/">Ver novedades</a>
+          <a class="btn btn-secundario" href="/socios/">Hazte socio</a>
+        </div>
+      </div>
+      <div class="hero-foto">
+        <Image src={hero} alt={`Vista de ${site.pueblo}`} width={1200} height={900} loading="eager" fetchpriority="high" />
+        {destacada && (
+          <a class="pegatina" href={`/novedades/${destacada.id}/`}>
+            <span class="pegatina-etiqueta">Lo último</span>
+            <span class="pegatina-titulo">{destacada.data.titulo}</span>
+          </a>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="cabecera-seccion">
+        <h2>Tablón de novedades</h2>
+        <a href="/novedades/">Todas las novedades</a>
+      </div>
+      <div class="lista">
+        {ultimas.map((n) => <NoticiaItem noticia={n} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion seccion-suave">
+    <div class="contenedor">
+      <div class="cabecera-seccion">
+        <h2>La tienda del pueblo</h2>
+        <a href="/tienda/">Ver toda la tienda</a>
+      </div>
+      <p class="intro">
+        Camisetas, sudaderas y pegatinas de Otero. Todo lo que se recauda va a las actividades de la asociación.
+      </p>
+      <div class="rejilla-productos">
+        {productos.map((p) => <ProductoCard producto={p} compacto />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="cabecera-seccion">
+        <h2>Fotos</h2>
+        <a href="/galeria/">Ver la galería</a>
+      </div>
+      <div class="mosaico">
+        {muestra.map((f, i) => (
+          <a href="/galeria/" class:list={['mosaico-item', `pos-${i + 1}`]}>
+            <Image src={f.src} alt={f.pie} width={900} height={700} loading="lazy" />
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion apoya">
+    <div class="contenedor apoya-grid">
+      <div class="bloque bloque-socio">
+        <h2>Hazte socio</h2>
+        <p>
+          Por {euros(pagos.cuotaSocioEuros)} al año mantienes vivas las fiestas y las actividades, y decides en la asamblea.
+        </p>
+        <a class="btn btn-claro" href="/socios/">Cómo hacerse socio</a>
+      </div>
+      <div class="bloque bloque-dona">
+        <h2>Echa una mano</h2>
+        <p>Una donación puntual, por Bizum o con tarjeta, para lo que haga falta este año.</p>
+        <a class="btn btn-claro" href="/donaciones/">Donar</a>
+      </div>
+      <div class="bloque bloque-redes">
+        <h2>Síguenos</h2>
+        {redesActivas().length > 0 ? (
+          <>
+            <p>Las fotos del día a día y los avisos rápidos están en las redes del pueblo.</p>
+            <Redes />
+          </>
+        ) : (
+          <p>Escríbenos a <a href={`mailto:${site.email}`}>{site.email}</a> y te avisamos de todo.</p>
+        )}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Portada */
+  .hero {
+    padding-block: clamp(2rem, 5vw, 4.5rem) clamp(2rem, 5vw, 3rem);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .hero h1 {
+    font-size: var(--t-hero);
+    font-weight: 800;
+    line-height: 0.92;
+    letter-spacing: -0.045em;
+    margin-bottom: 1.25rem;
+    color: var(--azul);
+  }
+
+  .hero-sub {
+    font-size: var(--t-md);
+    max-width: 34ch;
+    color: var(--texto);
+    margin-bottom: 1.75rem;
+  }
+
+  .hero-acciones {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-foto {
+    position: relative;
+  }
+
+  .hero-foto img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radio-grande) var(--radio) var(--radio-grande) var(--radio);
+  }
+
+  .pegatina {
+    position: absolute;
+    left: -1rem;
+    bottom: 1.5rem;
+    max-width: min(20rem, 85%);
+    background: var(--amarillo);
+    color: var(--tinta);
+    text-decoration: none;
+    padding: 0.9rem 1.1rem;
+    border-radius: 1rem;
+    transform: rotate(-3deg);
+    box-shadow: 0 12px 24px -12px rgba(20, 33, 61, 0.5);
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .pegatina:hover {
+    transform: rotate(-1deg) scale(1.02);
+  }
+
+  .pegatina-etiqueta {
+    font-size: var(--t-xs);
+    font-weight: 700;
+    color: var(--fucsia-oscuro);
+  }
+
+  .pegatina-titulo {
+    font-weight: 800;
+    line-height: 1.2;
+    font-size: var(--t-base);
+  }
+
+  /* Secciones */
+  .intro {
+    max-width: 52ch;
+    color: var(--texto-suave);
+    margin-top: -1rem;
+    margin-bottom: 2rem;
+  }
+
+  .rejilla-productos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .mosaico {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 14rem 14rem;
+    gap: 1rem;
+  }
+
+  .mosaico-item {
+    border-radius: var(--radio);
+    overflow: hidden;
+    display: block;
+  }
+
+  .mosaico-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pos-1 {
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
+  }
+  .pos-2 {
+    grid-column: 3 / 4;
+  }
+  .pos-3 {
+    grid-column: 4 / 5;
+    grid-row: 1 / 3;
+  }
+  .pos-4 {
+    grid-column: 3 / 4;
+  }
+
+  /* Apoya */
+  .apoya {
+    padding-top: 0;
+  }
+
+  .apoya-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .bloque {
+    padding: 2rem;
+    border-radius: var(--radio);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .bloque h2 {
+    color: #fff;
+    font-size: var(--t-lg);
+  }
+
+  .bloque p {
+    flex: 1;
+    opacity: 0.95;
+  }
+
+  .bloque .btn {
+    align-self: flex-start;
+  }
+
+  .bloque a:not(.btn) {
+    color: #fff;
+    text-decoration-color: var(--amarillo);
+  }
+
+  .bloque-socio {
+    background: var(--verde);
+  }
+
+  .bloque-dona {
+    background: var(--fucsia);
+  }
+
+  .bloque-redes {
+    background: var(--azul);
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-foto {
+      order: -1;
+    }
+
+    .pegatina {
+      left: 0.75rem;
+      bottom: -1rem;
+    }
+
+    .rejilla-productos,
+    .apoya-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .mosaico {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: 11rem 11rem 11rem;
+    }
+
+    .pos-1 {
+      grid-column: 1 / 3;
+      grid-row: 1 / 2;
+    }
+    .pos-2 {
+      grid-column: 1 / 2;
+      grid-row: 2 / 3;
+    }
+    .pos-3 {
+      grid-column: 2 / 3;
+      grid-row: 2 / 4;
+    }
+    .pos-4 {
+      grid-column: 1 / 2;
+      grid-row: 3 / 4;
+    }
+  }
+</style>
