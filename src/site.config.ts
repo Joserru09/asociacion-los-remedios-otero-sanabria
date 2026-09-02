@@ -18,8 +18,8 @@ export const site = {
   url: 'https://otero-de-sanabria.pages.dev',
   idioma: 'es',
   email: 'ac.losremedios@gmail.com', // CAMBIAR
-  telefono: '648 123 456', // CAMBIAR
-  telefonoEnlace: '+34648123456', // CAMBIAR
+  telefono: '666666666', // CAMBIAR
+  telefonoEnlace: '+666666666', // CAMBIAR
   direccion: 'Otero de Sanabria',
   codigoPostal: '49369',
   provincia: 'Zamora',
@@ -30,13 +30,13 @@ export const site = {
 export const redes = {
   // Deja en cadena vacía las que no tengáis: no se mostrarán.
   facebook: 'https://facebook.com/CAMBIAR',
-  instagram: 'https://instagram.com/CAMBIAR',
+  instagram: 'https://www.instagram.com/ac.losremedios?igsi=MTg4ODd1MmZra3l4Zw==',
   youtube: 'https://youtube.com/@CAMBIAR',
   tiktok: 'https://tiktok.com/@CAMBIAR',
 };
 
 /** Canal de difusión de WhatsApp: es el aviso rápido del pueblo, va aparte de las redes. */
-export const whatsapp = 'https://whatsapp.com/channel/CAMBIAR'; // CAMBIAR
+export const whatsapp = 'https://whatsapp.com/channel/0029VagnNvUAu3aPsNSzJY3R'; 
 
 /**
  * Pagos. La web no procesa dinero: enlaza a Stripe Payment Links y muestra los datos de Bizum e IBAN.
