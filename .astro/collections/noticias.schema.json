@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "titulo": {
+      "type": "string"
+    },
+    "fecha": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "resumen": {
+      "type": "string",
+      "maxLength": 220
+    },
+    "imagen": {
+      "type": "string"
+    },
+    "destacada": {
+      "default": false,
+      "type": "boolean"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "titulo",
+    "fecha",
+    "resumen"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "nombre": {
+      "type": "string"
+    },
+    "precio": {
+      "type": "number"
+    },
+    "imagen": {
+      "type": "string"
+    },
+    "enlaceCompra": {
+      "type": "string",
+      "format": "uri"
+    },
+    "tallas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "agotado": {
+      "default": false,
+      "type": "boolean"
+    },
+    "orden": {
+      "default": 99,
+      "type": "number"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "nombre",
+    "precio",
+    "imagen",
+    "enlaceCompra"
+  ]
+}

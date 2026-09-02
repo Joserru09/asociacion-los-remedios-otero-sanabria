@@ -1,0 +1,17 @@
+{
+  // Configuración para desplegar la web en Cloudflare Workers.
+  // No hay código de servidor: es un "Worker de solo assets", es decir, Cloudflare
+  // sirve directamente los ficheros estáticos de dist/. Las peticiones a ficheros
+  // estáticos no consumen invocaciones de Worker, así que sigue siendo gratis.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "asociacion-los-remedios-otero-sanabria",
+  "compatibility_date": "2026-09-02",
+  "assets": {
+    "directory": "./dist",
+    // Sirve nuestra página 404 cuando la URL no existe
+    "not_found_handling": "404-page"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

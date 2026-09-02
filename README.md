@@ -95,23 +95,39 @@ encarga del cobro, la dirección de envío y el recibo.
 
 Los pedidos llegan al panel de Stripe (y por correo si lo activas). El stock se sigue controlando a mano.
 
-## Despliegue en Cloudflare Pages
+## Despliegue en Cloudflare Workers
 
-1. Sube este repositorio a GitHub.
-2. En [dash.cloudflare.com](https://dash.cloudflare.com) → `Workers & Pages` → `Create` → `Pages` → `Connect to Git`.
-3. Elige el repositorio y configura:
-   - Framework preset: **Astro**
-   - Build command: `npm run build`
-   - Build output directory: `dist`
-   - Variable de entorno `NODE_VERSION` = `22` (Cloudflare también lee `.node-version`).
-4. `Save and Deploy`. Tendrás la web en `https://<nombre>.pages.dev` y a partir de ahí cada push a `main` despliega solo;
-   cada pull request genera una URL de vista previa.
+El proyecto se despliega como *Worker de solo assets*: no hay código de servidor, Cloudflare sirve
+directamente los ficheros de `dist/`. La configuración está en `wrangler.jsonc`.
+
+### Desde el panel de Cloudflare (recomendado)
+
+1. Sube el repositorio a GitHub.
+2. En [dash.cloudflare.com](https://dash.cloudflare.com) → `Compute (Workers)` → `Create` → pestaña
+   `Import a repository` → elige el repositorio.
+3. Rellena:
+   - **Build command**: `npm run build`
+   - **Deploy command**: `npx wrangler deploy`
+   - **Root directory**: `/` (o la subcarpeta donde esté `package.json`)
+   - Variable de entorno `NODE_VERSION` = `22`
+4. Deja activado el token que crea Cloudflare automáticamente y despliega.
+
+A partir de ahí, cada `push` a `main` construye y publica. Si activas los builds de ramas no productivas,
+cada rama o pull request genera además una URL de vista previa.
+
+### Desde tu ordenador
+
+```bash
+npm run deploy       # construye y despliega con Wrangler
+```
+
+La primera vez Wrangler abrirá el navegador para iniciar sesión en Cloudflare.
 
 ### Dominio propio
 
-Cuando compres el dominio: en el proyecto de Pages, `Custom domains` → `Set up a custom domain`. Si el DNS
-lo lleva Cloudflare, lo configura solo; si no, te dirá qué registro CNAME crear. Después cambia la URL en
-`src/site.config.ts`, `astro.config.mjs` y `public/robots.txt`.
+Cuando compres el dominio: en el Worker, `Settings` → `Domains & Routes` → `Add custom domain`. Si el DNS
+lo lleva Cloudflare, lo configura solo. Después cambia la URL en `src/site.config.ts`, `astro.config.mjs`
+y `public/robots.txt`.
 
 ## Estructura
 
@@ -129,6 +145,7 @@ src/
   pages/                Una ruta por fichero
   styles/global.css     Paleta, tipografía y estilos base
 public/                 Ficheros que se copian tal cual (favicon, robots.txt, og.png, _headers)
+wrangler.jsonc          Configuración de despliegue en Cloudflare Workers
 .github/workflows/      CI: comprueba que la web construye en cada PR
 ```
 

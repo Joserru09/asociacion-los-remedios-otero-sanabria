@@ -1,0 +1,10 @@
+
+import __ASTRO_IMAGE_IMPORT_0 from "../../assets/noticias/asamblea.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fnoticias%2Fasamblea.md";
+import __ASTRO_IMAGE_IMPORT_1 from "../../assets/noticias/fiestas-2026.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fnoticias%2Ffiestas-2026.md";
+import __ASTRO_IMAGE_IMPORT_2 from "../../assets/noticias/limpieza-fuente.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fnoticias%2Flimpieza-fuente.md";
+import __ASTRO_IMAGE_IMPORT_3 from "../../assets/tienda/camiseta.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fproductos%2Fcamiseta.md";
+import __ASTRO_IMAGE_IMPORT_4 from "../../assets/tienda/gorra.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fproductos%2Fgorra.md";
+import __ASTRO_IMAGE_IMPORT_5 from "../../assets/tienda/pegatinas.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fproductos%2Fpegatinas.md";
+import __ASTRO_IMAGE_IMPORT_6 from "../../assets/tienda/sudadera.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fproductos%2Fsudadera.md";
+export default new Map([["../../assets/noticias/asamblea.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fnoticias%2Fasamblea.md", __ASTRO_IMAGE_IMPORT_0], ["../../assets/noticias/fiestas-2026.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fnoticias%2Ffiestas-2026.md", __ASTRO_IMAGE_IMPORT_1], ["../../assets/noticias/limpieza-fuente.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fnoticias%2Flimpieza-fuente.md", __ASTRO_IMAGE_IMPORT_2], ["../../assets/tienda/camiseta.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fproductos%2Fcamiseta.md", __ASTRO_IMAGE_IMPORT_3], ["../../assets/tienda/gorra.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fproductos%2Fgorra.md", __ASTRO_IMAGE_IMPORT_4], ["../../assets/tienda/pegatinas.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fproductos%2Fpegatinas.md", __ASTRO_IMAGE_IMPORT_5], ["../../assets/tienda/sudadera.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fproductos%2Fsudadera.md", __ASTRO_IMAGE_IMPORT_6]]);
+		
