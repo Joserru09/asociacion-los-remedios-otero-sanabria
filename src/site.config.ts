@@ -20,6 +20,17 @@ export const site = {
   email: 'ac.losremedios@gmail.com', // CAMBIAR
   telefono: '666666666', // CAMBIAR
   telefonoEnlace: '+666666666', // CAMBIAR
+  /**
+   * Encuadre de la foto grande de la portada. La foto se recorta muy apaisada en
+   * el ordenador y casi cuadrada en el móvil, así que aquí se dice qué parte
+   * tiene que sobrevivir siempre al recorte.
+   *   'center 50%'  el centro (por defecto)
+   *   'center 35%'  sube el encuadre: para fotos con mucho cielo
+   *   'center 70%'  lo baja: para fotos donde lo bueno está abajo
+   *   '30% 55%'     lo desplaza a la izquierda
+   * CAMBIAR al poner la foto definitiva: prueba con `npm run dev` hasta que cuadre.
+   */
+  heroFoco: 'center 55%',
   direccion: 'Otero de Sanabria',
   codigoPostal: '49369',
   provincia: 'Zamora',

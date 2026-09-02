@@ -48,6 +48,7 @@ const canal = whatsappActivo();
       loading="eager"
       fetchpriority="high"
       class="hero-foto"
+      style={`object-position: ${site.heroFoco}`}
     />
     <div class="hero-velo" aria-hidden="true"></div>
     <div class="contenedor hero-dentro">
@@ -185,6 +186,7 @@ const canal = whatsappActivo();
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /* El punto de enfoque se fija desde site.config.ts (site.heroFoco). */
   }
 
   .hero-velo {
