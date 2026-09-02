@@ -1,72 +1,97 @@
 ---
+import Icono from './Icono.astro';
 import { redesActivas } from '../site.config';
 
 interface Props {
+  /** "color" pinta cada red con su color; "sobrio" las deja en verde. */
+  estilo?: 'color' | 'sobrio';
   class?: string;
 }
-const { class: clase = '' } = Astro.props;
+const { estilo = 'color', class: clase = '' } = Astro.props;
 
-const iconos: Record<string, { label: string; path: string }> = {
-  instagram: {
-    label: 'Instagram',
-    path: 'M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM17.5 5.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2z',
-  },
-  facebook: {
-    label: 'Facebook',
-    path: 'M13.5 22v-8h2.7l.4-3.2h-3.1V8.8c0-.9.3-1.6 1.6-1.6h1.7V4.3c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.4H7.4V14h2.8v8h3.3z',
-  },
-  whatsapp: {
-    label: 'Canal de WhatsApp',
-    path: 'M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.1 14.9l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 0 1 12 4zm-3 4.5c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.1 0 1.3.9 2.5 1 2.7.2.2 1.8 2.9 4.5 3.9 2.2.9 2.7.7 3.2.6.5 0 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.5-.3l-1.7-.8c-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1-.3-.1-1.1-.4-2.1-1.3-.8-.7-1.3-1.5-1.5-1.8-.1-.3 0-.4.1-.5l.4-.5.3-.4c.1-.2 0-.3 0-.5L10 8.9c-.2-.4-.3-.4-.5-.4H9z',
-  },
-  youtube: {
-    label: 'YouTube',
-    path: 'M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2C2 8.8 2 12 2 12s0 3.2.4 4.8a2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8c.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5.2 3L10 15z',
-  },
-  tiktok: {
-    label: 'TikTok',
-    path: 'M16.5 3c.3 2.2 1.7 3.6 3.9 3.8v3.1c-1.5 0-2.8-.4-3.9-1.2v6a5.6 5.6 0 1 1-4.8-5.5v3.2a2.5 2.5 0 1 0 1.7 2.3V3h3.1z',
-  },
+const etiquetas: Record<string, string> = {
+  facebook: 'Facebook',
+  instagram: 'Instagram',
+  youtube: 'YouTube',
+  tiktok: 'TikTok',
 };
 
 const activas = redesActivas();
 ---
 
-{activas.length > 0 && (
-  <ul class={`redes ${clase}`}>
-    {activas.map(([clave, url]) => (
-      <li>
-        <a href={url} target="_blank" rel="noopener" aria-label={iconos[clave].label} title={iconos[clave].label}>
-          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d={iconos[clave].path} /></svg>
-        </a>
-      </li>
-    ))}
-  </ul>
-)}
+{
+  activas.length > 0 && (
+    <ul class:list={['redes', estilo, clase]}>
+      {activas.map(([clave, url]) => (
+        <li>
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener"
+            class={`red ${clave}`}
+            aria-label={`${etiquetas[clave]} de la asociación`}
+            title={etiquetas[clave]}
+          >
+            <Icono nombre={clave as 'facebook'} tamano={20} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}
 
 <style>
   .redes {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.75rem;
     list-style: none;
     margin: 0;
     padding: 0;
+    flex-wrap: wrap;
   }
 
-  .redes a {
+  .red {
     display: grid;
     place-items: center;
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
-    color: var(--texto);
-    background: var(--superficie);
-    border: 1px solid var(--linea);
+    color: #fff;
+    text-decoration: none;
+    transition: transform 180ms ease, filter 180ms ease;
   }
 
-  .redes a:hover {
-    border-color: var(--oro);
-    color: var(--oro-claro);
-    background: var(--superficie);
+  .red:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+    color: #fff;
+  }
+
+  .color .facebook {
+    background: #1877f2;
+  }
+
+  .color .instagram {
+    background: radial-gradient(circle at 30% 108%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+  }
+
+  .color .youtube {
+    background: #ff0000;
+  }
+
+  .color .tiktok {
+    background: #111014;
+  }
+
+  .sobrio .red {
+    background: transparent;
+    border: 1px solid var(--linea);
+    color: var(--verde);
+  }
+
+  .sobrio .red:hover {
+    background: var(--verde);
+    border-color: var(--verde);
+    color: #fff;
   }
 </style>

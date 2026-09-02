@@ -1,0 +1,150 @@
+---
+/**
+ * Adornos vegetales dibujados a línea. Son el único ornamento de la web
+ * y aparecen siempre en el mismo sitio: flanqueando los títulos de sección,
+ * bajo el titular de la portada y en las esquinas de algunos paneles.
+ *
+ *  rama     Ramita corta con hojas. Se usa a los lados de los títulos.
+ *  filete   Ramita + corazón + ramita, para debajo de un titular.
+ *  ramo     Rama larga y curva, para decorar una esquina.
+ *  iglesia  La espadaña de Otero, como marca de agua de fondo.
+ */
+interface Props {
+  tipo?: 'rama' | 'filete' | 'ramo' | 'iglesia';
+  /** Voltea el adorno horizontalmente (para el lado derecho de un título) */
+  espejo?: boolean;
+  class?: string;
+}
+const { tipo = 'rama', espejo = false, class: clase = '' } = Astro.props;
+---
+
+{
+  tipo === 'rama' && (
+    <svg
+      class={`adorno ${clase}`}
+      style={espejo ? 'transform: scaleX(-1)' : undefined}
+      viewBox="0 0 64 18"
+      width="64"
+      height="18"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M1 9h62" />
+      <path d="M18 9c1.6-4.4 6-5.8 9.4-4.4C25.8 8.6 21.4 10.2 18 9z" />
+      <path d="M28 9c1.6 4.4 6 5.8 9.4 4.4C35.8 9.4 31.4 7.8 28 9z" />
+      <path d="M38 9c1.6-4.4 6-5.8 9.4-4.4C45.8 8.6 41.4 10.2 38 9z" />
+      <path d="M48 9c1.4 3.6 4.8 4.8 7.6 3.7C54.2 9.3 50.6 8 48 9z" />
+    </svg>
+  )
+}
+
+{
+  tipo === 'filete' && (
+    <svg
+      class={`adorno ${clase}`}
+      viewBox="0 0 220 26"
+      width="220"
+      height="26"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M4 13h86M130 13h86" />
+      <path d="M26 13c1.6-4.4 6-5.8 9.4-4.4C33.8 12.6 29.4 14.2 26 13z" />
+      <path d="M36 13c1.6 4.4 6 5.8 9.4 4.4C43.8 13.4 39.4 11.8 36 13z" />
+      <path d="M48 13c1.6-4.4 6-5.8 9.4-4.4C55.8 12.6 51.4 14.2 48 13z" />
+      <path d="M58 13c1.6 4.4 6 5.8 9.4 4.4C65.8 13.4 61.4 11.8 58 13z" />
+      <path d="M194 13c-1.6-4.4-6-5.8-9.4-4.4 1.6 4 6 5.6 9.4 4.4z" />
+      <path d="M184 13c-1.6 4.4-6 5.8-9.4 4.4 1.6-4 6-5.6 9.4-4.4z" />
+      <path d="M172 13c-1.6-4.4-6-5.8-9.4-4.4 1.6 4 6 5.6 9.4 4.4z" />
+      <path d="M162 13c-1.6 4.4-6 5.8-9.4 4.4 1.6-4 6-5.6 9.4-4.4z" />
+      <path
+        d="M110 21.5l-1-.9c-3.8-3.4-6.3-5.7-6.3-8.5a3.9 3.9 0 0 1 3.9-3.9c1.3 0 2.5.6 3.4 1.6a4.5 4.5 0 0 1 3.4-1.6 3.9 3.9 0 0 1 3.9 3.9c0 2.8-2.5 5.1-6.3 8.5l-1 .9z"
+        fill="currentColor"
+        stroke="none"
+      />
+    </svg>
+  )
+}
+
+{
+  tipo === 'ramo' && (
+    <svg
+      class={`adorno ${clase}`}
+      style={espejo ? 'transform: scaleX(-1)' : undefined}
+      viewBox="0 0 110 200"
+      width="110"
+      height="200"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M92 4C76 34 62 74 56 116c-4 30-6 54-6 78" />
+      <path d="M84 26c-9-5-19-2-23 6 9 4 19 1 23-6z" />
+      <path d="M80 40c8 3 16-1 18-9-8-3-16 1-18 9z" />
+      <path d="M72 62c-9-5-19-2-23 6 9 4 19 1 23-6z" />
+      <path d="M69 78c8 3 16-1 18-9-8-3-16 1-18 9z" />
+      <path d="M62 102c-9-5-19-2-23 6 9 4 19 1 23-6z" />
+      <path d="M60 118c8 3 16-1 18-9-8-3-16 1-18 9z" />
+      <path d="M55 142c-8-5-18-2-22 6 9 4 18 1 22-6z" />
+      <path d="M53 158c8 3 15-1 17-9-8-3-15 1-17 9z" />
+      <path d="M51 178c-7-4-15-2-18 5 7 3 15 1 18-5z" />
+    </svg>
+  )
+}
+
+{
+  tipo === 'iglesia' && (
+    <svg
+      class={`adorno ${clase}`}
+      style={espejo ? 'transform: scaleX(-1)' : undefined}
+      viewBox="0 0 150 120"
+      width="150"
+      height="120"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M6 116h138" />
+      <path d="M44 116V34h22v82" />
+      <path d="M40 34 55 14l15 20" />
+      <path d="M55 14V2M50 7h10" />
+      <path d="M49 52v-8a6 6 0 0 1 12 0v8z" />
+      <path d="M49 74v-6a6 6 0 0 1 12 0v6z" />
+      <path d="M66 116V62h56v54" />
+      <path d="M62 62 94 40l32 22" />
+      <path d="M86 116V96a8 8 0 0 1 16 0v20" />
+      <circle cx="94" cy="78" r="5" />
+      <path d="M122 116V80h16v36" />
+      <path d="M118 80l12-10 12 10" />
+      <path d="M126 88h8v9h-8z" />
+      <path d="M28 116V88h16v28" />
+      <path d="M24 88l12-10 12 10" />
+    </svg>
+  )
+}
+
+<style>
+  .adorno {
+    display: block;
+    height: auto;
+    color: var(--verde-claro);
+  }
+</style>

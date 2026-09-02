@@ -1,7 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import Portada from '../components/Portada.astro';
-import Redes from '../components/Redes.astro';
+import TituloSeccion from '../components/TituloSeccion.astro';
+import Adorno from '../components/Adorno.astro';
+import Icono from '../components/Icono.astro';
 import { site } from '../site.config';
 
 // CAMBIAR: la junta actual. Deja solo los cargos que existan.
@@ -12,119 +14,308 @@ const junta = [
   { cargo: 'Tesorería', nombre: 'Nombre Apellido' },
   { cargo: 'Vocalías', nombre: 'Nombre, Nombre y Nombre' },
 ];
+
+const hitos = [
+  {
+    año: site.fundacion,
+    texto:
+      'Un grupo de vecinos funda la asociación para que las fiestas de la Virgen de los Remedios no dependan de que alguien se acuerde de llamar a la orquesta.',
+  },
+  {
+    año: 2008,
+    texto: 'Primera jornada de limpieza de la fuente y el lavadero. Desde entonces se repite cada verano.',
+  },
+  {
+    año: 2016,
+    texto: 'Empieza la paellada popular del sábado de fiestas, que hoy reúne a más de cien personas.',
+  },
+  {
+    año: 2023,
+    texto: 'Arranca la rehabilitación del molino con trabajo de los socios y una campaña de donaciones.',
+  },
+];
+
+const valores = [
+  {
+    icono: 'gente' as const,
+    titulo: 'Comunidad',
+    texto:
+      'Somos vecinos e hijos del pueblo. Nadie cobra: todo el trabajo sale del tiempo libre de los socios.',
+  },
+  {
+    icono: 'documento' as const,
+    titulo: 'Patrimonio',
+    texto:
+      'La fuente, el lavadero, el molino y la iglesia. Lo que nos dejaron nuestros abuelos hay que cuidarlo.',
+  },
+  {
+    icono: 'copa' as const,
+    titulo: 'Tradición',
+    texto:
+      'Las fiestas de agosto, la procesión, los juegos y el tute. Cosas que solo siguen existiendo si alguien las organiza.',
+  },
+];
 ---
 
-<Base titulo="La asociación" descripcion={`Quiénes somos y qué hacemos en la ${site.nombreLargo}, ${site.pueblo}.`}>
+<Base
+  titulo="La asociación"
+  descripcion={`Quiénes somos y qué hacemos en la ${site.nombreLargo}, ${site.pueblo}.`}
+>
   <Portada
+    rotulo="Quiénes somos"
     titulo="La asociación"
     entradilla={`Somos vecinos e hijos del pueblo que nos juntamos para que ${site.pueblo} tenga fiestas, actividades y a alguien que se ocupe de lo común.`}
   />
 
-  <section class="seccion quienes">
-    <div class="contenedor dos">
+  <section class="seccion">
+    <div class="contenedor dos-columnas">
       <div class="prosa">
-        <h2>Quiénes somos</h2>
+        <h2>Nuestra historia</h2>
         <p>
-          La {site.nombreLargo} nació en {site.fundacion}, cuando un grupo de vecinos decidió que las fiestas de la Virgen de los Remedios no podían depender de que alguien se acordara de llamar a la orquesta. Desde entonces hemos ido a más: hoy organizamos las fiestas de agosto, las jornadas de limpieza de la fuente y el lavadero, la paellada, los juegos de los peques y lo que surja cada año.
+          La {site.nombreLargo} nació en {site.fundacion}, cuando un grupo de vecinos decidió que las fiestas de
+          la Virgen de los Remedios no podían depender de que alguien se acordara de llamar a la orquesta. Desde
+          entonces hemos ido a más: hoy organizamos las fiestas de agosto, las jornadas de limpieza de la fuente
+          y el lavadero, la paellada, los juegos de los peques y lo que surja cada año.
         </p>
         <p>
-          Nos financiamos con las cuotas de los socios, la barra de las fiestas, la venta de camisetas y las donaciones. No tenemos nadie a sueldo: todo el trabajo lo hacemos entre los socios en nuestro tiempo libre.
+          Nos financiamos con las cuotas de los socios, la barra de las fiestas, la venta de camisetas y las
+          donaciones. No tenemos a nadie a sueldo: todo el trabajo lo hacemos entre los socios en nuestro tiempo
+          libre.
         </p>
         <p>
-          El nombre viene de la patrona del pueblo, Nuestra Señora de los Remedios, cuya fiesta se celebra el fin de semana grande de agosto.
+          El nombre viene de la patrona del pueblo, Nuestra Señora de los Remedios, cuya fiesta se celebra el fin
+          de semana grande de agosto.
         </p>
       </div>
 
-      <aside class="junta panel">
+      <aside class="junta panel-marco">
+        <Adorno tipo="ramo" class="ramo" />
         <h2>La junta</h2>
         <dl>
-          {junta.map((j) => (
-            <div>
-              <dt>{j.cargo}</dt>
-              <dd>{j.nombre}</dd>
-            </div>
-          ))}
+          {
+            junta.map((j) => (
+              <div>
+                <dt>{j.cargo}</dt>
+                <dd>{j.nombre}</dd>
+              </div>
+            ))
+          }
         </dl>
-        <p class="meta">La junta se renueva en la asamblea anual de socios.</p>
+        <p class="nota">La junta se renueva en la asamblea anual de socios.</p>
       </aside>
     </div>
   </section>
 
-  <section class="seccion seccion-suave">
-    <div class="contenedor tres">
-      <div>
-        <h2>Contacto</h2>
-        <p>
-          <a href={`mailto:${site.email}`}>{site.email}</a><br />
-          Local de la asociación, {site.pueblo}, {site.comarca}.
-        </p>
+  <section class="seccion seccion-crema">
+    <div class="contenedor">
+      <TituloSeccion titulo="Lo que nos mueve" />
+      <div class="rejilla valores">
+        {
+          valores.map((v) => (
+            <div class="valor">
+              <span class="icono-valor">
+                <Icono nombre={v.icono} tamano={22} />
+              </span>
+              <h3>{v.titulo}</h3>
+              <p>{v.texto}</p>
+            </div>
+          ))
+        }
       </div>
-      <div>
-        <h2>Redes</h2>
-        <p>Avisos rápidos por el canal de WhatsApp, fotos en Instagram y Facebook.</p>
-        <Redes />
-      </div>
-      <div>
-        <h2>Documentos</h2>
-        <p>
-          Los estatutos, las actas y las cuentas están a disposición de cualquier socio. Pídelos por correo y te los mandamos.
-        </p>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="contenedor">
+      <TituloSeccion titulo="Un poco de camino" />
+      <ol class="hitos">
+        {
+          hitos.map((h) => (
+            <li>
+              <span class="hito-año">{h.año}</span>
+              <p>{h.texto}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="seccion seccion-crema">
+    <div class="contenedor">
+      <TituloSeccion
+        titulo="Documentos"
+        entradilla="Los estatutos, las actas de las asambleas y las cuentas de cada año están a disposición de cualquier socio."
+      />
+      <p class="centrado documentos-pie">
+        Pídenoslos en <a href={`mailto:${site.email}`}>{site.email}</a> y te los mandamos. Estamos preparando una
+        página de cuentas para publicarlas sin tener que pedirlas.
+      </p>
+      <div class="centrar">
+        <a class="btn btn-linea" href="/contacto/">
+          <Icono nombre="sobre" tamano={14} />
+          Escríbenos
+        </a>
       </div>
     </div>
   </section>
 </Base>
 
 <style>
-  .quienes {
-    padding-top: 1rem;
-  }
-
-  .dos {
+  .dos-columnas {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 3rem;
+    grid-template-columns: minmax(0, 1.5fr) minmax(17rem, 1fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
     align-items: start;
   }
 
+  .junta {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .junta :global(.ramo) {
+    position: absolute;
+    top: -1.5rem;
+    right: -1.75rem;
+    width: 5rem;
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .junta h2 {
+    position: relative;
+    margin: 0 0 1.25rem;
+    font-size: 1.35rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
 
   .junta dl {
-    margin: 0 0 1rem;
+    position: relative;
+    margin: 0 0 1.25rem;
     display: grid;
     gap: 0.9rem;
   }
 
   .junta dt {
-    font-size: var(--t-sm);
-    color: var(--texto-suave);
+    font-size: var(--t-xs);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--terracota-osc);
   }
 
   .junta dd {
-    margin: 0;
+    margin: 0.15rem 0 0;
+    font-family: var(--serif);
+    font-size: 1.2rem;
     font-weight: 600;
     color: var(--tinta);
-    font-size: var(--t-md);
   }
 
-  .junta .meta {
+  .junta .nota {
+    position: relative;
     margin: 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--linea-fina);
+    font-size: var(--t-sm);
+    color: var(--tinta-suave);
   }
 
-  .tres {
+  .valores {
+    text-align: center;
+  }
+
+  .valor {
+    padding: 0 0.5rem;
+  }
+
+  .icono-valor {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2.5rem;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 0.9rem;
+    border-radius: 50%;
+    border: 1px solid var(--verde-claro);
+    color: var(--verde-medio);
+    background: var(--papel);
   }
 
-  .tres p {
-    color: var(--texto-suave);
+  .valor h3 {
+    margin: 0 0 0.35rem;
+    font-size: 1.2rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 600;
   }
 
+  .valor p {
+    margin: 0;
+    color: var(--tinta-media);
+    font-size: var(--t-sm);
+    max-width: 34ch;
+    margin-inline: auto;
+  }
 
-  @media (max-width: 860px) {
-    .dos,
-    .tres {
+  .hitos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0;
+    max-width: 46rem;
+    margin-inline: auto;
+  }
+
+  .hitos li {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    gap: 1.5rem;
+    padding: 1.15rem 0;
+    border-top: 1px solid var(--linea-fina);
+  }
+
+  .hitos li:first-child {
+    border-top: 0;
+  }
+
+  .hito-año {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--terracota-osc);
+    line-height: 1.2;
+  }
+
+  .hitos p {
+    margin: 0;
+    color: var(--tinta-media);
+  }
+
+  .documentos-pie {
+    max-width: 54ch;
+    color: var(--tinta-media);
+    margin-bottom: 1.75rem;
+  }
+
+  .centrar {
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 900px) {
+    .dos-columnas {
       grid-template-columns: 1fr;
-      gap: 2rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .hitos li {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
     }
   }
 </style>

@@ -1,0 +1,154 @@
+---
+/**
+ * La marca de la asociación: el pueblo dibujado a línea dentro de un arco
+ * (la espadaña de la iglesia en el centro, las casas de piedra alrededor)
+ * y el nombre debajo o al lado.
+ *
+ *  disposicion="fila"     Emblema a la izquierda y nombre al lado (cabecera).
+ *  disposicion="columna"  Emblema arriba y nombre centrado debajo (pie).
+ */
+interface Props {
+  disposicion?: 'fila' | 'columna';
+  tono?: 'oscuro' | 'claro';
+  emblema?: number;
+  class?: string;
+}
+const { disposicion = 'fila', tono = 'oscuro', emblema = 56, class: clase = '' } = Astro.props;
+---
+
+<span class:list={['marca', disposicion, tono, clase]}>
+  <svg
+    class="emblema"
+    width={emblema}
+    height={Math.round((emblema * 132) / 120)}
+    viewBox="0 0 120 132"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <!-- el arco -->
+    <path d="M13 126V58C13 28 34 8 60 8s47 20 47 50v68" stroke-width="1.8"></path>
+    <path d="M9 126h102" stroke-width="1.8"></path>
+
+    <!-- casa de la izquierda -->
+    <path d="M19 126V92h24v34"></path>
+    <path d="M16 92 31 79l15 13"></path>
+    <path d="M27 100h10v11H27z"></path>
+    <path d="M32 100v11"></path>
+
+    <!-- espadaña -->
+    <path d="M46 126V52h16v74"></path>
+    <path d="M43 52 54 36l11 16"></path>
+    <path d="M54 36v-9M50.5 30.5h7"></path>
+    <path d="M50 68v-6a4 4 0 0 1 8 0v6z"></path>
+
+    <!-- nave de la iglesia -->
+    <path d="M62 126V80h28v46"></path>
+    <path d="M59 80 76 66l17 14"></path>
+    <path d="M72 126v-16a4.5 4.5 0 0 1 9 0v16"></path>
+    <circle cx="76.5" cy="94" r="3.5"></circle>
+
+    <!-- casa de la derecha -->
+    <path d="M92 126V96h12v30"></path>
+    <path d="M89 96l9-10 9 10"></path>
+    <path d="M95 103h6v7h-6z"></path>
+  </svg>
+
+  <span class="letras">
+    <span class="nombre">AC Los Remedios</span>
+    <span class="pueblo">· Otero de Sanabria ·</span>
+    <span class="tipo">Asociación cultural</span>
+  </span>
+</span>
+
+<style>
+  .marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    color: var(--tinta);
+    text-decoration: none;
+    line-height: 1;
+  }
+
+  .marca.claro {
+    color: var(--sobre-verde);
+  }
+
+  .marca.columna {
+    flex-direction: column;
+    gap: 0.85rem;
+    text-align: center;
+  }
+
+  .emblema {
+    flex: none;
+    height: auto;
+  }
+
+  .letras {
+    display: flex;
+    flex-direction: column;
+    gap: 0.22rem;
+  }
+
+  .nombre {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .pueblo {
+    font-family: var(--serif);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--tinta-media);
+  }
+
+  .claro .pueblo {
+    color: var(--sobre-verde-suave);
+  }
+
+  .tipo {
+    font-family: var(--sans);
+    font-size: 0.56rem;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+    line-height: 1;
+  }
+
+  .claro .tipo {
+    color: var(--sobre-verde-suave);
+  }
+
+  .columna .nombre {
+    font-size: 1.45rem;
+  }
+
+  @media (max-width: 420px) {
+    .marca.fila {
+      gap: 0.65rem;
+    }
+    .fila .nombre {
+      font-size: 1.05rem;
+    }
+    .fila .pueblo {
+      font-size: 0.68rem;
+    }
+    .fila .tipo {
+      display: none;
+    }
+  }
+</style>

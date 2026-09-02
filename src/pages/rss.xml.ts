@@ -8,14 +8,14 @@ export async function GET(context: APIContext) {
     (a, b) => b.data.fecha.getTime() - a.data.fecha.getTime(),
   );
   return rss({
-    title: `Novedades de ${site.nombre}`,
+    title: `Noticias de ${site.nombre}`,
     description: site.descripcion,
     site: context.site ?? site.url,
     items: noticias.map((n) => ({
       title: n.data.titulo,
       pubDate: n.data.fecha,
       description: n.data.resumen,
-      link: `/novedades/${n.id}/`,
+      link: `/noticias/${n.id}/`,
     })),
     customData: `<language>es-es</language>`,
   });

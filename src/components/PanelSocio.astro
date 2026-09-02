@@ -1,0 +1,140 @@
+---
+/**
+ * La estampa de «Hazte socio / Donaciones»: el panel enmarcado que
+ * acompaña al tablón en la portada.
+ */
+import Icono from './Icono.astro';
+import Adorno from './Adorno.astro';
+import { pagos } from '../site.config';
+import { euros } from '../utils/fecha';
+---
+
+<aside class="socio panel-marco">
+  <Adorno tipo="ramo" class="ramo" />
+
+  <div class="contenido">
+    <Icono nombre="corazon" tamano={26} class="corazon" />
+    <h2>Hazte socio<span class="barra">/</span>Donaciones</h2>
+    <p class="texto">
+      Tu apoyo hace posible nuestras actividades, la conservación de nuestro patrimonio y el futuro de
+      Otero de Sanabria.
+    </p>
+
+    <ul class="ventajas">
+      <li>
+        <Icono nombre="hoja" tamano={16} />
+        <span>Cuota anual desde <strong>{euros(pagos.cuotaSocioEuros)}</strong></span>
+      </li>
+      <li>
+        <Icono nombre="hoja" tamano={16} />
+        <span>Aportaciones y donaciones puntuales</span>
+      </li>
+    </ul>
+
+    <a class="btn btn-verde" href="/socios/">
+      Hazte socio
+      <Icono nombre="corazon" tamano={14} />
+    </a>
+
+    <p class="gracias">
+      ¡Gracias por formar parte!
+      <Icono nombre="corazon" tamano={14} />
+    </p>
+  </div>
+</aside>
+
+<style>
+  .socio {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .ramo {
+    position: absolute;
+    top: -1.5rem;
+    right: -1.75rem;
+    width: 5.5rem;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .contenido {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .corazon {
+    color: var(--terracota);
+  }
+
+  .socio h2 {
+    margin: 0;
+    font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .barra {
+    color: var(--verde-medio);
+    margin-inline: 0.35rem;
+    font-weight: 300;
+  }
+
+  .texto {
+    margin: 0;
+    max-width: 34ch;
+    color: var(--tinta-media);
+    font-size: var(--t-sm);
+    line-height: 1.65;
+  }
+
+  .ventajas {
+    list-style: none;
+    margin: 0.35rem 0 0.5rem;
+    padding: 0;
+    display: grid;
+    gap: 0.55rem;
+    text-align: left;
+  }
+
+  .ventajas li {
+    display: grid;
+    grid-template-columns: 1.15rem 1fr;
+    gap: 0.6rem;
+    align-items: center;
+    font-size: var(--t-sm);
+    color: var(--tinta-media);
+  }
+
+  .ventajas :global(svg) {
+    color: var(--verde-claro);
+  }
+
+  .ventajas strong {
+    color: var(--tinta);
+    font-weight: 600;
+  }
+
+  .gracias {
+    margin: 0.4rem 0 0;
+    font-family: var(--mano);
+    font-size: 1.3rem;
+    color: var(--verde-medio);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .gracias :global(svg) {
+    color: var(--terracota);
+  }
+</style>

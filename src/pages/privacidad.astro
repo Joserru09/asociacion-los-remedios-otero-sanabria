@@ -1,0 +1,255 @@
+---
+import Base from '../layouts/Base.astro';
+import Portada from '../components/Portada.astro';
+import { site } from '../site.config';
+
+/**
+ * CAMBIAR antes de publicar: los datos identificativos y, si cambia la web,
+ * los tratamientos que se describen aquí. Este texto es una base razonable para
+ * una asociación pequeña; conviene que lo revise alguien que entienda.
+ */
+const cif = 'G00000000'; // CAMBIAR
+const actualizado = '2 de septiembre de 2026'; // CAMBIAR cuando se modifique el texto
+
+const tratamientos = [
+  {
+    quien: 'Personas que se hacen socias',
+    que: 'Nombre y apellidos, teléfono, correo electrónico y los pagos de la cuota.',
+    para: 'Gestionar tu condición de socio: convocarte a la asamblea, mandarte el acta y las cuentas y llevar el control de las cuotas.',
+    base: 'La ejecución de tu relación como socio y el cumplimiento de las obligaciones legales de la asociación.',
+    cuanto:
+      'Mientras seas socio y, después, el tiempo que exija la normativa contable y fiscal (hasta seis años en el caso de los pagos).',
+  },
+  {
+    quien: 'Personas que nos escriben',
+    que: 'El correo electrónico o el teléfono desde el que escribes y lo que nos cuentes en el mensaje.',
+    para: 'Responderte y, si hace falta, hacer el seguimiento del asunto.',
+    base: 'Tu propio consentimiento al escribirnos.',
+    cuanto: 'El tiempo necesario para resolver la consulta y un año más, por si vuelves a escribir sobre lo mismo.',
+  },
+  {
+    quien: 'Personas que compran en la tienda',
+    que: 'Los datos que facilitas en la pasarela de pago: nombre, dirección de envío y correo.',
+    para: 'Prepararte y mandarte el pedido.',
+    base: 'La ejecución del contrato de compraventa.',
+    cuanto: 'El tiempo que exija la normativa contable y fiscal.',
+  },
+  {
+    quien: 'Personas que aparecen en las fotos',
+    que: 'Imágenes tomadas en actividades y fiestas abiertas del pueblo.',
+    para: 'Dar a conocer las actividades de la asociación y conservar la memoria del pueblo.',
+    base: 'El interés legítimo de la asociación en difundir sus actividades. Si apareces y no quieres, lo retiramos.',
+    cuanto: 'Mientras la asociación mantenga la web, salvo que pidas su retirada.',
+  },
+];
+---
+
+<Base
+  titulo="Política de privacidad"
+  descripcion={`Cómo trata sus datos personales la ${site.nombreLargo}: qué datos recogemos, para qué y cómo ejercer tus derechos.`}
+>
+  <Portada
+    rotulo="Protección de datos"
+    titulo="Política de privacidad"
+    entradilla="En corto: solo pedimos lo justo para gestionar las altas de socio, responderte y mandarte los pedidos. No vendemos ni cedemos datos a nadie, y esta web no lleva cookies de seguimiento ni analítica."
+  />
+
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="prosa columna">
+        <p class="actualizado">Última actualización: {actualizado}</p>
+
+        <h2>1. Quién es el responsable</h2>
+        <p>
+          El responsable del tratamiento es la <strong>{site.nombreLargo}</strong>, con NIF {cif} y domicilio en
+          {' '}{site.direccion}, {site.codigoPostal} {site.provincia}. Puedes escribirnos en cualquier momento a
+          {' '}<a href={`mailto:${site.email}`}>{site.email}</a> o llamarnos al
+          {' '}<a href={`tel:${site.telefonoEnlace}`}>{site.telefono}</a>.
+        </p>
+        <p>
+          La asociación no tiene delegado de protección de datos: para cualquier asunto relacionado con tus
+          datos, escribe a ese mismo correo.
+        </p>
+
+        <h2>2. Qué datos tratamos y para qué</h2>
+      </div>
+
+      <div class="tabla-envoltorio columna">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Quién</th>
+              <th scope="col">Qué datos</th>
+              <th scope="col">Para qué</th>
+              <th scope="col">Base legal</th>
+              <th scope="col">Cuánto tiempo</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              tratamientos.map((t) => (
+                <tr>
+                  <th scope="row">{t.quien}</th>
+                  <td>{t.que}</td>
+                  <td>{t.para}</td>
+                  <td>{t.base}</td>
+                  <td>{t.cuanto}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="prosa columna">
+        <h2>3. A quién se los damos</h2>
+        <p>A nadie, salvo a quien hace falta para que la web y la asociación funcionen:</p>
+        <ul>
+          <li>
+            <strong>Cloudflare</strong>, que aloja esta web y sirve las páginas.
+          </li>
+          <li>
+            <strong>Stripe Payments Europe, Ltd.</strong>, que gestiona los pagos con tarjeta de la tienda, las
+            cuotas y las donaciones. Nosotros no vemos ni guardamos los datos de tu tarjeta.
+          </li>
+          <li>
+            <strong>Nuestro banco</strong>, para los cobros por Bizum y transferencia.
+          </li>
+          <li>
+            <strong>La Administración</strong>, cuando la ley nos obliga (obligaciones fiscales y del registro de
+            asociaciones).
+          </li>
+        </ul>
+        <p>No vendemos, alquilamos ni cedemos datos personales con fines comerciales. Nunca.</p>
+
+        <h2>4. Cookies y analítica</h2>
+        <p>
+          Esta web <strong>no usa cookies</strong> ni ninguna otra tecnología de seguimiento. No hay analítica,
+          no hay píxeles de redes sociales y no se carga ningún recurso de terceros: hasta las tipografías están
+          alojadas en nuestro propio servidor. Por eso no verás ningún aviso de cookies.
+        </p>
+        <p>
+          Si pulsas un enlace a una red social, a la pasarela de pago o al canal de WhatsApp, saldrás de esta web
+          y pasarás a aplicarse la política de privacidad de ese servicio.
+        </p>
+
+        <h2>5. Tus derechos</h2>
+        <p>Puedes ejercer en cualquier momento estos derechos, gratis y sin dar explicaciones:</p>
+        <ul>
+          <li><strong>Acceso:</strong> saber qué datos tuyos tenemos.</li>
+          <li><strong>Rectificación:</strong> corregir los que estén mal o incompletos.</li>
+          <li><strong>Supresión:</strong> que los borremos cuando ya no sean necesarios.</li>
+          <li><strong>Oposición y limitación:</strong> que dejemos de tratarlos o los conservemos solo bloqueados.</li>
+          <li><strong>Portabilidad:</strong> que te los demos en un formato que puedas llevarte.</li>
+          <li><strong>Retirar el consentimiento</strong> cuando el tratamiento se basara en él.</li>
+        </ul>
+        <p>
+          Basta con escribir a <a href={`mailto:${site.email}`}>{site.email}</a> indicando qué quieres. Te
+          contestamos en un mes como mucho. Si no quedas conforme, puedes reclamar ante la{' '}
+          <a href="https://www.aepd.es" target="_blank" rel="noopener">Agencia Española de Protección de Datos</a>.
+        </p>
+
+        <h2>6. Seguridad</h2>
+        <p>
+          Los datos de socios los guarda la junta directiva y solo acceden a ellos las personas que los
+          necesitan para su cargo. Aplicamos medidas razonables para una entidad de nuestro tamaño y no
+          conservamos nada que no haga falta.
+        </p>
+
+        <h2>7. Menores</h2>
+        <p>
+          Para dar de alta como socio a un menor de catorce años hace falta la autorización de su padre, madre o
+          tutor. Si detectamos datos de un menor sin esa autorización, los eliminamos.
+        </p>
+
+        <h2>8. Cambios en esta política</h2>
+        <p>
+          Si cambiamos algo importante lo anunciaremos en el tablón de noticias y actualizaremos la fecha del
+          principio de esta página.
+        </p>
+
+        <hr />
+
+        <p class="apunte">
+          Si algo de esto no se entiende, pregúntanos y te lo explicamos con nuestras palabras:
+          <a href={`mailto:${site.email}`}>{site.email}</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .columna {
+    max-width: 46rem;
+    margin-inline: auto;
+  }
+
+  .actualizado {
+    font-size: var(--t-xs);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .prosa h2 {
+    font-size: 1.3rem;
+    letter-spacing: 0.04em;
+  }
+
+  .tabla-envoltorio {
+    overflow-x: auto;
+    margin-bottom: 1.75rem;
+    border: 1px solid var(--linea);
+    border-radius: var(--radio);
+    background: var(--papel);
+  }
+
+  table {
+    width: 100%;
+    min-width: 44rem;
+    border-collapse: collapse;
+    font-size: var(--t-sm);
+  }
+
+  th,
+  td {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--linea-fina);
+    color: var(--tinta-media);
+    line-height: 1.55;
+  }
+
+  thead th {
+    background: var(--crema-2);
+    color: var(--tinta);
+    font-size: var(--t-xs);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  tbody th {
+    color: var(--tinta);
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-weight: 600;
+    width: 11rem;
+  }
+
+  tbody tr:last-child th,
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .apunte {
+    font-size: var(--t-sm);
+    color: var(--tinta-suave);
+  }
+</style>

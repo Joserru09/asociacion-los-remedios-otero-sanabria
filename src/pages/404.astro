@@ -1,15 +1,91 @@
 ---
 import Base from '../layouts/Base.astro';
+import Adorno from '../components/Adorno.astro';
+import Icono from '../components/Icono.astro';
 ---
 
-<Base titulo="Página no encontrada">
-  <section class="seccion">
-    <div class="contenedor estrecho">
-      <h1>Esta página no existe</h1>
-      <p>
-        Puede que el enlace esté mal escrito o que hayamos movido la página. Prueba desde la
-        <a href="/">portada</a> o mira el <a href="/novedades/">tablón de novedades</a>.
+<Base titulo="Página no encontrada" descripcion="Esta página no existe. Vuelve a la portada o al tablón de noticias.">
+  <section class="perdida">
+    <Adorno tipo="iglesia" class="iglesia" />
+    <div class="contenedor dentro">
+      <p class="numero">404</p>
+      <h1>Por aquí no se va a ninguna parte</h1>
+      <Adorno tipo="filete" class="filete" />
+      <p class="texto">
+        Puede que el enlace esté mal escrito o que hayamos movido la página. Prueba desde la portada o mira el
+        tablón, que es donde está casi todo.
       </p>
+      <div class="botones">
+        <a class="btn btn-terracota" href="/">
+          <Icono nombre="hoja" tamano={15} />
+          Ir a la portada
+        </a>
+        <a class="btn btn-linea" href="/noticias/">
+          <Icono nombre="calendario" tamano={15} />
+          Ver el tablón
+        </a>
+      </div>
     </div>
   </section>
 </Base>
+
+<style>
+  .perdida {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding-block: clamp(3.5rem, 10vw, 7rem);
+    background: var(--crema-2);
+    flex: 1;
+  }
+
+  .perdida :global(.iglesia) {
+    position: absolute;
+    left: 50%;
+    bottom: -2rem;
+    transform: translateX(-50%);
+    width: 22rem;
+    opacity: 0.12;
+    pointer-events: none;
+  }
+
+  .dentro {
+    position: relative;
+  }
+
+  .numero {
+    font-family: var(--serif);
+    font-size: clamp(3.5rem, 12vw, 6rem);
+    font-weight: 300;
+    line-height: 1;
+    margin: 0;
+    color: var(--verde-claro);
+    letter-spacing: 0.08em;
+  }
+
+  .perdida h1 {
+    margin: 0.5rem 0 0;
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+    font-weight: 400;
+  }
+
+  .filete {
+    margin: 1rem auto 1.25rem;
+    width: min(200px, 65%);
+  }
+
+  .texto {
+    max-width: 46ch;
+    margin: 0 auto 1.85rem;
+    color: var(--tinta-media);
+  }
+
+  .botones {
+    display: flex;
+    justify-content: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+  }
+</style>

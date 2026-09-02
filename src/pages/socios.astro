@@ -1,118 +1,224 @@
 ---
 import Base from '../layouts/Base.astro';
 import Portada from '../components/Portada.astro';
+import TituloSeccion from '../components/TituloSeccion.astro';
+import Adorno from '../components/Adorno.astro';
+import Icono from '../components/Icono.astro';
 import { pagos, site } from '../site.config';
 import { euros } from '../utils/fecha';
+
+const ventajas = [
+  'Voz y voto en la asamblea anual: decides en qué se gasta el dinero.',
+  'Prioridad para apuntarse a la paellada y a las actividades con plazas limitadas.',
+  'Descuento en la tienda solidaria cuando lo anunciamos en las fiestas.',
+  'Recibir el acta y las cuentas de la asociación cada año.',
+];
+
+const preguntas = [
+  {
+    p: '¿Hay que vivir en Otero?',
+    r: 'No. La mitad de los socios vive fuera y viene en verano o cuando puede. Ser del pueblo no va de empadronamiento.',
+  },
+  {
+    p: '¿Cuándo se renueva la cuota?',
+    r: 'Cada primavera, antes de la asamblea. Te avisamos por correo; si pagaste con tarjeta como suscripción, se renueva sola.',
+  },
+  {
+    p: '¿Puedo darme de baja?',
+    r: 'Cuando quieras, escribiéndonos un correo. Si la cuota era recurrente, la cancelamos y no se cobra más.',
+  },
+  {
+    p: '¿Los menores pueden ser socios?',
+    r: 'Sí, con la autorización de un padre, una madre o un tutor. Escríbenos y te contamos cómo.',
+  },
+];
 ---
 
-<Base titulo="Hazte socio" descripcion={`Hazte socio de la ${site.nombreLargo} por ${euros(pagos.cuotaSocioEuros)} al año.`}>
+<Base
+  titulo="Hazte socio"
+  descripcion={`Hazte socio de la ${site.nombreLargo} por ${euros(pagos.cuotaSocioEuros)} al año y ayuda a que ${site.pueblo} siga teniendo fiestas y actividades.`}
+>
   <Portada
+    rotulo="Forma parte"
     titulo="Hazte socio"
     entradilla="Ser socio es la manera de que el pueblo siga teniendo fiestas, actividades y a alguien que cuide de lo común. Cuesta menos que una cena."
   />
 
-  <section class="seccion pasos-seccion">
+  <section class="seccion">
     <div class="contenedor dos">
-      <div>
-        <h2>Qué supone</h2>
+      <div class="izquierda">
+        <div class="cuota panel-marco">
+          <Adorno tipo="ramo" class="ramo" />
+          <p class="cuota-rotulo">Cuota anual desde</p>
+          <p class="cuota-cifra">{euros(pagos.cuotaSocioEuros)}</p>
+          <p class="cuota-nota">Un café al mes, más o menos.</p>
+        </div>
+
+        <h2 class="titulo-lista">Qué supone</h2>
         <ul class="ventajas">
-          <li>Voz y voto en la asamblea anual: decides en qué se gasta el dinero.</li>
-          <li>Prioridad para apuntarse a la paellada y a las actividades con plazas limitadas.</li>
-          <li>Descuento en la tienda cuando lo anunciamos en las fiestas.</li>
-          <li>Recibir el acta y las cuentas de la asociación.</li>
+          {
+            ventajas.map((v) => (
+              <li>
+                <Icono nombre="hoja" tamano={15} />
+                <span>{v}</span>
+              </li>
+            ))
+          }
         </ul>
-        <p class="cuota">
-          <span>Cuota anual</span>
-          <strong>{euros(pagos.cuotaSocioEuros)}</strong>
-        </p>
       </div>
 
       <div class="pasos">
-        <h2>Cómo hacerse socio</h2>
+        <h2 class="titulo-lista">Cómo hacerse socio</h2>
         <ol>
           <li>
-            <strong>Paga la cuota.</strong> Con tarjeta desde aquí o por Bizum al {pagos.bizum} con el concepto «Socio» y tu nombre.
+            <strong>Paga la cuota.</strong>{' '}
+            Con tarjeta desde aquí, o por Bizum al {pagos.bizum} poniendo «Socio» y tu nombre en el concepto.
             <div class="acciones">
-              <a class="btn btn-primario" href={pagos.cuotaSocioStripe} target="_blank" rel="noopener">Pagar la cuota con tarjeta</a>
+              <a class="btn btn-verde" href={pagos.cuotaSocioStripe} target="_blank" rel="noopener">
+                <Icono nombre="corazon" tamano={14} />
+                Pagar la cuota con tarjeta
+              </a>
             </div>
           </li>
           <li>
-            <strong>Dinos quién eres.</strong>
-            {pagos.formularioSocio ? (
-              <>
-                Rellena <a href={pagos.formularioSocio} target="_blank" rel="noopener">el formulario de alta</a> con tu nombre, teléfono y correo.
-              </>
-            ) : (
-              <>
-                Escríbenos a <a href={`mailto:${site.email}?subject=Alta%20de%20socio`}>{site.email}</a> con tu nombre, teléfono y correo.
-              </>
-            )}
+            <strong>Dinos quién eres.</strong>{' '}
+            {
+              pagos.formularioSocio ? (
+                <>
+                  Rellena{' '}
+                  <a href={pagos.formularioSocio} target="_blank" rel="noopener">
+                    el formulario de alta
+                  </a>{' '}
+                  con tu nombre, teléfono y correo.
+                </>
+              ) : (
+                <>
+                  Escríbenos a{' '}
+                  <a href={`mailto:${site.email}?subject=Alta%20de%20socio`}>{site.email}</a> con tu nombre,
+                  teléfono y correo.
+                </>
+              )
+            }
+            <p class="dato-legal">
+              Usamos esos datos solo para gestionar tu condición de socio. Puedes consultar cómo los tratamos en la{' '}
+              <a href="/privacidad/">política de privacidad</a>.
+            </p>
           </li>
           <li>
-            <strong>Listo.</strong> Te confirmamos el alta y te avisamos de la próxima asamblea. La cuota se renueva cada año en primavera.
+            <strong>Listo.</strong>{' '}
+            Te confirmamos el alta y te avisamos de la próxima asamblea. La cuota se renueva cada año en primavera.
           </li>
         </ol>
       </div>
     </div>
   </section>
 
-  <section class="seccion seccion-suave">
-    <div class="contenedor estrecho">
-      <h2>¿Ya eres socio?</h2>
-      <p>
-        Renueva la cuota de este año con el mismo botón o por Bizum. Si has cambiado de teléfono o de correo, dínoslo para que te sigan llegando los avisos.
-      </p>
+  <section class="seccion seccion-crema">
+    <div class="contenedor">
+      <TituloSeccion titulo="Preguntas frecuentes" />
+      <div class="faq">
+        {
+          preguntas.map((q) => (
+            <div class="pregunta">
+              <h3>{q.p}</h3>
+              <p>{q.r}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="ya-socio">
+        <p>
+          <strong>¿Ya eres socio?</strong> Renueva la cuota de este año con el mismo botón o por Bizum. Si has
+          cambiado de teléfono o de correo, dínoslo para que te sigan llegando los avisos.
+        </p>
+        <a class="btn btn-linea" href="/contacto/">
+          <Icono nombre="sobre" tamano={14} />
+          Actualizar mis datos
+        </a>
+      </div>
     </div>
   </section>
 </Base>
 
 <style>
-  .pasos-seccion {
-    padding-top: 1rem;
-  }
-
   .dos {
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 3rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
     align-items: start;
   }
 
+  .cuota {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    margin-bottom: 2.25rem;
+  }
+
+  .cuota :global(.ramo) {
+    position: absolute;
+    top: -1.25rem;
+    right: -1.5rem;
+    width: 4.5rem;
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .cuota-rotulo {
+    position: relative;
+    margin: 0;
+    font-size: var(--t-xs);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+  }
+
+  .cuota-cifra {
+    position: relative;
+    margin: 0.35rem 0 0.2rem;
+    font-family: var(--serif);
+    font-size: clamp(3rem, 8vw, 4.25rem);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--terracota);
+  }
+
+  .cuota-nota {
+    position: relative;
+    margin: 0;
+    font-size: var(--t-sm);
+    color: var(--tinta-suave);
+  }
+
+  .titulo-lista {
+    font-size: 1.35rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1.15rem;
+  }
+
   .ventajas {
-    padding-left: 1.3em;
-    margin-bottom: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.85rem;
   }
 
   .ventajas li {
-    margin-bottom: 0.6em;
+    display: grid;
+    grid-template-columns: 1.1rem 1fr;
+    gap: 0.8rem;
+    align-items: start;
+    color: var(--tinta-media);
   }
 
-  .ventajas li::marker {
-    color: var(--oro);
-  }
-
-  .cuota {
-    display: inline-flex;
-    flex-direction: column;
-    background: var(--superficie);
-    border: 1px solid var(--linea);
-    border-left: 3px solid var(--oro);
-    padding: 1.25rem 1.75rem;
-    border-radius: var(--radio);
-    margin: 0;
-  }
-
-  .cuota span {
-    font-size: var(--t-sm);
-    color: var(--texto-suave);
-  }
-
-  .cuota strong {
-    font-family: var(--serif);
-    font-weight: 600;
-    color: var(--oro-claro);
-    font-size: var(--t-xl);
-    line-height: 1.1;
+  .ventajas :global(svg) {
+    color: var(--verde-claro);
+    margin-top: 0.42rem;
   }
 
   .pasos ol {
@@ -125,22 +231,29 @@ import { euros } from '../utils/fecha';
   .pasos li {
     counter-increment: paso;
     position: relative;
-    padding-left: 3.5rem;
-    padding-bottom: 1.75rem;
+    padding-left: 3.75rem;
+    padding-bottom: 2rem;
+    color: var(--tinta-media);
+  }
+
+  .pasos li:last-child {
+    padding-bottom: 0;
   }
 
   .pasos li::before {
     content: counter(paso);
     position: absolute;
     left: 0;
-    top: -0.2rem;
-    width: 2.5rem;
-    height: 2.5rem;
+    top: -0.35rem;
+    width: 2.6rem;
+    height: 2.6rem;
     border-radius: 50%;
-    background: var(--superficie);
-    border: 1px solid var(--oro);
-    color: var(--oro-claro);
-    font-weight: 700;
+    background: var(--papel);
+    border: 1px solid var(--verde-claro);
+    color: var(--verde-medio);
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 600;
     display: grid;
     place-items: center;
   }
@@ -148,20 +261,69 @@ import { euros } from '../utils/fecha';
   .pasos li:not(:last-child)::after {
     content: '';
     position: absolute;
-    left: 1.2rem;
-    top: 2.4rem;
-    bottom: 0.2rem;
-    border-left: 2px dashed var(--linea);
+    left: 1.3rem;
+    top: 2.5rem;
+    bottom: 0.4rem;
+    border-left: 1px dashed var(--linea);
+  }
+
+  .pasos strong {
+    color: var(--tinta);
+    font-weight: 600;
   }
 
   .acciones {
-    margin-top: 0.75rem;
+    margin-top: 0.9rem;
   }
 
-  @media (max-width: 800px) {
+  .dato-legal {
+    margin: 0.7rem 0 0;
+    font-size: var(--t-xs);
+    color: var(--tinta-suave);
+  }
+
+  .faq {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(24rem, 100%), 1fr));
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .pregunta h3 {
+    margin: 0 0 0.35rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .pregunta p {
+    margin: 0;
+    color: var(--tinta-media);
+    font-size: var(--t-sm);
+  }
+
+  .ya-socio {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding-top: clamp(1.75rem, 3vw, 2.5rem);
+    border-top: 1px solid var(--linea);
+  }
+
+  .ya-socio p {
+    margin: 0;
+    max-width: 58ch;
+    color: var(--tinta-media);
+  }
+
+  .ya-socio strong {
+    color: var(--tinta);
+  }
+
+  @media (max-width: 900px) {
     .dos {
       grid-template-columns: 1fr;
-      gap: 2rem;
     }
   }
 </style>

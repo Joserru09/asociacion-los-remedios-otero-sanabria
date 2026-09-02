@@ -3,10 +3,21 @@
 Sitio estático hecho con [Astro](https://astro.build). Sin servidor, sin base de datos: el contenido son
 ficheros Markdown en el repositorio y cada `push` a `main` publica la web.
 
-- Novedades: `src/content/noticias/*.md`
+- Noticias: `src/content/noticias/*.md`
 - Tienda: `src/content/productos/*.md`
 - Galería: `src/assets/galeria/` + `src/data/galeria.ts`
-- Datos de la asociación, redes y pagos: `src/site.config.ts`
+- Actividades y programa de fiestas: `src/pages/actividades.astro` y `src/pages/fiestas.astro`
+- Datos de la asociación, contacto, redes y pagos: `src/site.config.ts`
+
+## El diseño
+
+Papel de pergamino, verde de los prados y terracota de las tejas. Titulares en Cormorant Garamond,
+texto en Instrument Sans y las frases escritas a mano en Parisienne; las tres autoalojadas.
+Los dibujos a línea (el pueblo dentro del arco, las ramitas, la iglesia y el mapa) son SVG hechos
+a mano en `src/components/`: `Marca.astro`, `Adorno.astro`, `Mapa.astro` e `Icono.astro`.
+
+Los colores y la escala tipográfica están en `src/styles/global.css`. Toda la paleta pasa el nivel
+AA de contraste; si cambias un color, compruébalo antes de subirlo.
 
 ## Puesta en marcha en local
 
@@ -20,10 +31,10 @@ npm run preview    # sirve dist/ para comprobarlo
 npx astro check    # comprobación de tipos y errores en .astro
 ```
 
-## Publicar una novedad
+## Publicar una noticia
 
 1. Crea `src/content/noticias/nombre-corto.md`. El nombre del fichero será la URL:
-   `sardinada-2026.md` → `/novedades/sardinada-2026/`.
+   `sardinada-2026.md` → `/noticias/sardinada-2026/`.
 2. Rellena la cabecera y escribe el texto en Markdown debajo:
 
    ```markdown
@@ -32,7 +43,7 @@ npx astro check    # comprobación de tipos y errores en .astro
    fecha: 2026-08-14
    resumen: 'Viernes a las 21:30. Trae tu plato y tu vaso.'
    imagen: '../../assets/noticias/sardinada.jpg'   # opcional
-   destacada: true                                  # opcional: la fija arriba y en la portada
+   destacada: true                                  # opcional: la sube al primer puesto de la portada
    ---
 
    Texto de la noticia en **Markdown**. Puedes usar listas, títulos (`##`) y enlaces.
@@ -64,19 +75,29 @@ Descripción del producto.
 ## Galería
 
 Copia las fotos en `src/assets/galeria/` (JPG, 1200–2000 px de ancho está bien) y añade una línea por foto
-en `src/data/galeria.ts` con el pie de foto. Las cuatro primeras aparecen también en la portada.
+en `src/data/galeria.ts` con el pie de foto. Las seis primeras aparecen también en la portada. Al pulsar una se abre a pantalla completa, sin JavaScript.
 
 ## Antes de publicar: qué cambiar
 
 Busca `CAMBIAR` en el proyecto (`grep -rn CAMBIAR src astro.config.mjs public`):
 
-- `src/site.config.ts`: email, redes, Bizum, IBAN, cuota de socio, enlaces de Stripe, URL de la web.
-- `src/pages/asociacion.astro`: nombres de la junta y el texto de «Quiénes somos».
+- `src/site.config.ts`: email, teléfono, redes, canal de WhatsApp, Bizum, IBAN, cuota de socio,
+  enlaces de Stripe y la URL de la web.
+- `src/pages/asociacion.astro`: los nombres de la junta, el texto de «Quiénes somos» y los hitos.
+- `src/pages/actividades.astro`: el calendario de actividades del año.
+- `src/pages/fiestas.astro`: el programa de las fiestas y el año.
+- `src/pages/aviso-legal.astro` y `src/pages/privacidad.astro`: el NIF y el número de registro de la
+  asociación. **Léelos enteros antes de publicar**: son una base razonable para una asociación pequeña,
+  pero conviene que los revise alguien que entienda. No son asesoramiento legal.
 - `astro.config.mjs` y `public/robots.txt`: la URL definitiva cuando tengas dominio.
-- Sustituye las imágenes de ejemplo en `src/assets/` por fotos reales (mismo nombre de fichero o actualiza las rutas).
-- `public/og.png`: la imagen que sale al compartir la web en WhatsApp. Idealmente 1200×630 con una foto del pueblo.
+- Sustituye las imágenes de ejemplo en `src/assets/` por fotos reales (mismo nombre de fichero o
+  actualiza las rutas). La más importante es `src/assets/hero.jpg`: es la foto grande de la portada.
+- `public/og.png`: la imagen que sale al compartir la web en WhatsApp. La actual se generó con el
+  emblema y la tipografía de la web; si quieres una foto del pueblo de fondo, sustitúyela (1200×630).
 
-Las redes con `CAMBIAR` o vacías no se muestran en la web publicada; en `npm run dev` se ven todas para revisar el diseño.
+Las redes y el canal de WhatsApp con `CAMBIAR` o vacíos no se muestran en la web publicada, y con
+ellos desaparece la franja de «Redes sociales / WhatsApp comunidad» de la portada. En `npm run dev`
+se ven todos para poder revisar el diseño.
 
 ## Pagos con Stripe
 
@@ -133,15 +154,20 @@ y `public/robots.txt`.
 
 ```
 src/
-  site.config.ts        Datos de la asociación, redes, pagos y menú
+  site.config.ts        Datos de la asociación, contacto, redes, pagos y menús
   content.config.ts     Esquema (campos obligatorios) de noticias y productos
   content/
     noticias/           Una noticia por fichero .md
     productos/          Un producto por fichero .md
   data/galeria.ts       Lista de fotos y pies de foto
   assets/               Imágenes que Astro optimiza (hero, galería, tienda, noticias)
-  layouts/Base.astro    Plantilla común: <head>, cabecera, pie
-  components/           Cabecera, pie, banderines, redes, tarjeta de producto, entrada del tablón
+  layouts/Base.astro    Plantilla común: <head>, datos estructurados, cabecera y pie
+  components/
+    Marca.astro         El emblema del pueblo y el nombre
+    Adorno.astro        Ramitas, filete con corazón y la iglesia de fondo
+    Icono.astro         Todos los iconos de línea
+    Mapa.astro          La silueta de la provincia con Otero marcado
+    Header · Footer · TituloSeccion · NoticiaCard · ProductoCard · PanelSocio · Redes · Portada
   pages/                Una ruta por fichero
   styles/global.css     Paleta, tipografía y estilos base
 public/                 Ficheros que se copian tal cual (favicon, robots.txt, og.png, _headers)
@@ -151,9 +177,13 @@ wrangler.jsonc          Configuración de despliegue en Cloudflare Workers
 
 ## Decisiones
 
-- **Sin frameworks de CSS ni JavaScript en el cliente.** El único JS que carga el navegador es cero; el menú
-  móvil funciona con CSS. Menos dependencias que mantener.
-- **Fuentes autoalojadas** (Fraunces para títulos, Instrument Sans para texto): no se hacen peticiones a Google Fonts.
+- **Sin frameworks de CSS y casi sin JavaScript.** El menú móvil, el desplegable de «La asociación» y
+  el visor de la galería funcionan solo con CSS. Lo único que carga JavaScript es el botón de copiar el
+  Bizum y el IBAN de `/donaciones/`, y si no se ejecuta, el botón ni siquiera aparece.
+- **Fuentes autoalojadas** (Cormorant Garamond, Instrument Sans y Parisienne), solo con el subconjunto
+  latino: no se hacen peticiones a Google Fonts y la web no necesita aviso de cookies.
+- **Un solo juego de puntos de corte.** Las rejillas usan `repeat(auto-fit, minmax(...))` en vez de
+  `@media` por página, así que se adaptan solas y no hay anchos en los que la web se descoloque.
 - **Imágenes optimizadas en build** con `astro:assets`: sube JPG normales y Astro genera WebP redimensionados.
 - **`trailingSlash: 'always'`**: todas las URL terminan en `/`, como las genera Cloudflare Pages, para evitar
   redirecciones y duplicados en buscadores.

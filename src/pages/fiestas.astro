@@ -1,0 +1,273 @@
+---
+import Base from '../layouts/Base.astro';
+import Portada from '../components/Portada.astro';
+import TituloSeccion from '../components/TituloSeccion.astro';
+import Adorno from '../components/Adorno.astro';
+import Icono from '../components/Icono.astro';
+import { site, whatsappActivo } from '../site.config';
+
+/**
+ * CAMBIAR cada año: el programa de las fiestas de Los Remedios.
+ * Esta página es fija a propósito, para que el enlace que se comparte
+ * en agosto sea siempre el mismo: /fiestas/
+ */
+const año = 2026;
+
+const programa = [
+  {
+    dia: 'Viernes',
+    fecha: '21 de agosto',
+    actos: [
+      { hora: '20:00', que: 'Pregón desde el balcón de la asociación' },
+      { hora: '21:30', que: 'Sardinada en la plaza. Trae tu plato y tu vaso' },
+      { hora: '00:00', que: 'Verbena con orquesta' },
+    ],
+  },
+  {
+    dia: 'Sábado',
+    fecha: '22 de agosto',
+    actos: [
+      { hora: '12:00', que: 'Juegos tradicionales para los peques en el prado' },
+      { hora: '14:30', que: 'Paellada popular. Hay que apuntarse antes del jueves' },
+      { hora: '19:00', que: 'Campeonato de tute y brisca' },
+      { hora: '00:00', que: 'Verbena y bingo de medianoche' },
+    ],
+  },
+  {
+    dia: 'Domingo',
+    fecha: '23 de agosto',
+    actos: [
+      { hora: '12:00', que: 'Misa y procesión de la Virgen de los Remedios' },
+      { hora: '14:00', que: 'Vermú de despedida' },
+    ],
+  },
+];
+
+const canal = whatsappActivo();
+---
+
+<Base
+  titulo="Fiestas de Los Remedios"
+  descripcion={`Programa de las fiestas de la Virgen de los Remedios en ${site.pueblo}: verbena, paellada, juegos, procesión y todo el fin de semana grande de agosto.`}
+>
+  <Portada
+    rotulo={`Fin de semana grande · Agosto de ${año}`}
+    titulo="Fiestas de Los Remedios"
+    entradilla="Tres días en honor a nuestra patrona, la Virgen de los Remedios. El programa se cierra en julio; hasta entonces puede cambiar algún horario."
+  />
+
+  <section class="seccion">
+    <div class="contenedor programa">
+      {
+        programa.map((d) => (
+          <div class="dia">
+            <div class="dia-cabecera">
+              <h2>{d.dia}</h2>
+              <span class="dia-fecha">{d.fecha}</span>
+            </div>
+            <ul class="actos">
+              {d.actos.map((a) => (
+                <li>
+                  <span class="hora">{a.hora}</span>
+                  <span class="que">{a.que}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="seccion seccion-crema">
+    <div class="contenedor">
+      <TituloSeccion titulo="Antes de venir" />
+      <div class="rejilla avisos">
+        <div class="aviso">
+          <span class="icono"><Icono nombre="gente" tamano={20} /></span>
+          <h3>La paellada se reserva</h3>
+          <p>
+            Apúntate antes del jueves escribiéndonos o diciéndoselo a cualquiera de la junta. Los socios tienen
+            prioridad si se llenan las plazas.
+          </p>
+        </div>
+        <div class="aviso">
+          <span class="icono"><Icono nombre="pin" tamano={20} /></span>
+          <h3>Aparcar</h3>
+          <p>
+            El fin de semana grande el pueblo se llena. Deja el coche en la entrada, junto a la era, y baja
+            andando: son cuatro minutos.
+          </p>
+        </div>
+        <div class="aviso">
+          <span class="icono"><Icono nombre="copa" tamano={20} /></span>
+          <h3>La barra es de todos</h3>
+          <p>
+            Toda la recaudación de la barra va a la asociación y financia buena parte de las fiestas del año que
+            viene. Gracias por consumir aquí.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion cierre-fiestas">
+    <Adorno tipo="iglesia" class="iglesia" />
+    <div class="contenedor">
+      <p class="mano frase">¡Nos vemos en agosto!</p>
+      <p class="texto-cierre">
+        Los cambios de última hora se anuncian en el <a href="/noticias/">tablón</a>{
+          canal ? ' y en el canal de WhatsApp' : ''
+        }.
+      </p>
+      <div class="botones">
+        <a class="btn btn-terracota" href="/noticias/">
+          <Icono nombre="calendario" tamano={15} />
+          Ver el tablón
+        </a>
+        {
+          canal && (
+            <a class="btn btn-linea" href={canal} target="_blank" rel="noopener">
+              <Icono nombre="whatsapp" tamano={15} />
+              Unirme al canal
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .programa {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .dia {
+    background: var(--papel);
+    border: 1px solid var(--linea);
+    border-radius: var(--radio);
+    padding: clamp(1.35rem, 2.5vw, 1.85rem);
+  }
+
+  .dia-cabecera {
+    padding-bottom: 0.85rem;
+    margin-bottom: 1.15rem;
+    border-bottom: 1px solid var(--linea-fina);
+  }
+
+  .dia-cabecera h2 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .dia-fecha {
+    font-size: var(--t-xs);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--terracota-osc);
+  }
+
+  .actos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .actos li {
+    display: grid;
+    grid-template-columns: 3.4rem 1fr;
+    gap: 0.85rem;
+    align-items: baseline;
+  }
+
+  .hora {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--verde-medio);
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .que {
+    color: var(--tinta-media);
+    font-size: var(--t-sm);
+    line-height: 1.55;
+  }
+
+  .avisos {
+    text-align: center;
+  }
+
+  .icono {
+    display: grid;
+    place-items: center;
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 0.85rem;
+    border-radius: 50%;
+    border: 1px solid var(--verde-claro);
+    background: var(--papel);
+    color: var(--verde-medio);
+  }
+
+  .aviso h3 {
+    margin: 0 0 0.35rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+
+  .aviso p {
+    margin: 0;
+    color: var(--tinta-media);
+    font-size: var(--t-sm);
+    max-width: 36ch;
+    margin-inline: auto;
+  }
+
+  .cierre-fiestas {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .cierre-fiestas :global(.iglesia) {
+    position: absolute;
+    left: 50%;
+    bottom: -2rem;
+    transform: translateX(-50%);
+    width: 16rem;
+    opacity: 0.14;
+    pointer-events: none;
+  }
+
+  .cierre-fiestas .contenedor {
+    position: relative;
+  }
+
+  .frase {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin: 0 0 0.5rem;
+    color: var(--terracota);
+  }
+
+  .texto-cierre {
+    color: var(--tinta-media);
+    margin-bottom: 1.75rem;
+  }
+
+  .botones {
+    display: flex;
+    justify-content: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+  }
+</style>

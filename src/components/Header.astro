@@ -1,50 +1,79 @@
 ---
-import { site, menu } from '../site.config';
+import Marca from './Marca.astro';
+import Icono from './Icono.astro';
+import { menu, site } from '../site.config';
 
 const ruta = Astro.url.pathname;
 const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(href));
+const ramaActiva = (item: (typeof menu)[number]) =>
+  activo(item.href) || (item.hijos ?? []).some((h) => activo(h.href));
 ---
 
 <header class="cabecera">
-  <div class="contenedor barra">
-    <a href="/" class="marca" aria-label={`${site.nombre}, inicio`}>
-      <svg viewBox="0 0 40 40" width="36" height="36" aria-hidden="true">
-        <rect width="40" height="40" rx="8" fill="var(--superficie)" stroke="var(--linea)" />
-        <circle cx="27" cy="13" r="4.5" fill="var(--oro)" />
-        <path d="M4 32 L15 18 L21 25 L27 20 L36 32 Z" fill="none" stroke="var(--texto)" stroke-width="1.8" stroke-linejoin="round" />
-      </svg>
-      <span class="marca-texto">
-        <span class="marca-nombre">{site.nombre}</span>
-        <span class="marca-pueblo">{site.pueblo}</span>
-      </span>
-    </a>
+  <input type="checkbox" id="menu-movil" class="solo-lectores interruptor" />
+  <label for="menu-movil" class="velo" aria-hidden="true"></label>
 
-    <input type="checkbox" id="menu-movil" class="solo-lectores menu-toggle" />
-    <label for="menu-movil" class="menu-boton" aria-label="Abrir menú">
-      <span></span><span></span><span></span>
-    </label>
+  <div class="franja">
+    <div class="contenedor barra">
+      <a href="/" class="enlace-marca" aria-label={`${site.nombre}, ir al inicio`}>
+        <Marca emblema={54} />
+      </a>
 
-    <nav class="menu" aria-label="Principal">
-      <ul>
-        {menu.map((item) => (
-          <li>
-            <a href={item.href} aria-current={activo(item.href) ? 'page' : undefined}>{item.label}</a>
-          </li>
-        ))}
-        <li class="menu-donar">
-          <a href="/donaciones/" class="btn btn-primario" aria-current={activo('/donaciones/') ? 'page' : undefined}>Donar</a>
-        </li>
-      </ul>
-    </nav>
+      <label for="menu-movil" class="boton-menu">
+        <span></span><span></span><span></span>
+        <span class="solo-lectores">Abrir o cerrar el menú</span>
+      </label>
+
+      <nav class="navegacion" aria-label="Principal">
+        <ul class="lista">
+          {
+            menu.map((item) => (
+              <li class:list={['item', { 'con-hijos': item.hijos }]}>
+                <a
+                  href={item.href}
+                  aria-current={activo(item.href) ? 'page' : undefined}
+                  class:list={{ activo: ramaActiva(item) }}
+                >
+                  {item.label}
+                  {item.hijos && <Icono nombre="chevron" tamano={12} class="chevron" />}
+                </a>
+                {item.hijos && (
+                  <ul class="submenu">
+                    {item.hijos.map((hijo) => (
+                      <li>
+                        <a href={hijo.href} aria-current={activo(hijo.href) ? 'page' : undefined}>
+                          {hijo.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+
+        <a href="/socios/" class="btn btn-verde boton-socio" aria-current={activo('/socios/') ? 'page' : undefined}>
+          Hazte socio
+          <Icono nombre="corazon" tamano={14} />
+        </a>
+      </nav>
+    </div>
   </div>
 </header>
 
 <style>
   .cabecera {
-    background: var(--fondo);
-    border-bottom: 1px solid var(--linea);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .franja {
     position: relative;
-    z-index: 10;
+    z-index: 2;
+    background: var(--crema);
+    border-bottom: 1px solid var(--linea);
   }
 
   .barra {
@@ -52,72 +81,124 @@ const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    padding-block: 0.9rem;
+    padding-block: 0.7rem;
   }
 
-  .marca {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
+  .enlace-marca {
     text-decoration: none;
-    color: var(--tinta);
+    color: inherit;
+    flex: none;
   }
 
-  .marca-texto {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-  }
-
-  .marca-nombre {
-    font-family: var(--serif);
-    font-weight: 600;
-    font-size: 1.15rem;
-  }
-
-  .marca-pueblo {
-    font-size: var(--t-xs);
-    color: var(--texto-suave);
-  }
-
-  .menu ul {
+  .navegacion {
     display: flex;
     align-items: center;
-    gap: clamp(0.75rem, 2vw, 1.9rem);
+    gap: clamp(1rem, 2.5vw, 2rem);
+  }
+
+  .lista {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.6rem, 1.8vw, 1.6rem);
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  .menu a:not(.btn) {
+  .item {
+    position: relative;
+  }
+
+  .lista > .item > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0;
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     text-decoration: none;
-    color: var(--texto);
-    font-weight: 500;
-    font-size: var(--t-sm);
-    padding: 0.35rem 0;
+    color: var(--tinta-media);
     border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color 140ms ease, border-color 140ms ease;
   }
 
-  .menu a:not(.btn):hover {
-    color: var(--oro-claro);
+  .lista > .item > a:hover {
+    color: var(--terracota-osc);
   }
 
-  .menu a:not(.btn)[aria-current='page'] {
-    color: var(--oro-claro);
-    border-bottom-color: var(--oro);
+  .lista > .item > a.activo {
+    color: var(--terracota-osc);
+    border-bottom-color: var(--terracota);
   }
 
-  .menu .btn {
-    padding: 0.55rem 1.1rem;
-    font-size: var(--t-sm);
+  .chevron {
+    transition: transform 160ms ease;
+    margin-top: 1px;
   }
 
-  .menu-boton {
+  .con-hijos:hover .chevron,
+  .con-hijos:focus-within .chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Desplegable, solo con CSS: se abre al pasar por encima y al tabular dentro. */
+  .submenu {
+    position: absolute;
+    top: 100%;
+    left: -1.1rem;
+    min-width: 13rem;
+    margin: 0;
+    padding: 0.4rem 0;
+    list-style: none;
+    background: var(--papel);
+    border: 1px solid var(--linea);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 140ms ease, transform 140ms ease, visibility 140ms;
+  }
+
+  .con-hijos:hover .submenu,
+  .con-hijos:focus-within .submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .submenu a {
+    display: block;
+    padding: 0.5rem 1.15rem;
+    font-size: 0.82rem;
+    text-decoration: none;
+    color: var(--tinta-media);
+  }
+
+  .submenu a:hover,
+  .submenu a[aria-current='page'] {
+    background: var(--crema-2);
+    color: var(--terracota-osc);
+  }
+
+  .boton-socio {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.71rem;
+    white-space: nowrap;
+  }
+
+  .boton-menu,
+  .velo {
     display: none;
   }
 
-  @media (max-width: 880px) {
-    .menu-boton {
+  /* ---------- Menú plegado ---------- */
+
+  @media (max-width: 1120px) {
+    .boton-menu {
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -125,67 +206,131 @@ const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(
       width: 44px;
       height: 44px;
       cursor: pointer;
-      border-radius: 8px;
+      border-radius: 3px;
+      flex: none;
     }
 
-    .menu-boton span {
+    .boton-menu span:not(.solo-lectores) {
       display: block;
-      height: 2px;
+      height: 1.5px;
       width: 24px;
       margin-inline: auto;
-      background: var(--texto);
+      background: var(--tinta);
       border-radius: 2px;
-      transition: transform 160ms ease, opacity 160ms ease;
+      transition: transform 180ms ease, opacity 180ms ease;
     }
 
-    .menu-toggle:focus-visible + .menu-boton {
-      outline: 2px solid var(--oro);
+    .interruptor:focus-visible ~ .franja .boton-menu {
+      outline: 2px solid var(--terracota);
+      outline-offset: 2px;
     }
 
-    .menu {
-      display: none;
+    .navegacion {
       position: absolute;
       inset: 100% 0 auto 0;
-      background: var(--fondo);
-      border-bottom: 1px solid var(--linea);
-      box-shadow: 0 24px 40px -20px rgba(0, 0, 0, 0.6);
-    }
-
-    .menu ul {
       flex-direction: column;
       align-items: stretch;
       gap: 0;
-      padding: 0.5rem var(--margen) 1.25rem;
-    }
-
-    .menu li a:not(.btn) {
-      display: block;
-      padding: 0.9rem 0;
+      padding: 0.25rem var(--margen) 1.5rem;
+      background: var(--crema);
       border-bottom: 1px solid var(--linea);
-      font-size: var(--t-md);
+      box-shadow: var(--sombra);
+      max-height: calc(100dvh - 5.5rem);
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: opacity 180ms ease, transform 180ms ease, visibility 180ms;
     }
 
-    .menu-donar {
-      padding-top: 1rem;
+    .lista {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
     }
 
-    .menu-donar .btn {
+    .lista > .item > a {
+      justify-content: space-between;
+      padding: 0.85rem 0;
+      font-size: 0.82rem;
+      border-bottom: 1px solid var(--linea-fina);
+    }
+
+    .lista > .item > a.activo {
+      border-bottom-color: var(--linea-fina);
+    }
+
+    .chevron {
+      display: none;
+    }
+
+    /* Plegado, el submenú se muestra siempre, sangrado bajo su sección. */
+    .submenu {
+      position: static;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      min-width: 0;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      background: transparent;
+      padding: 0;
+    }
+
+    .submenu a {
+      padding: 0.65rem 0 0.65rem 1.1rem;
+      border-bottom: 1px solid var(--linea-fina);
+      border-left: 2px solid var(--linea);
+      font-size: 0.8rem;
+    }
+
+    .submenu a:hover,
+    .submenu a[aria-current='page'] {
+      background: transparent;
+      border-left-color: var(--terracota);
+    }
+
+    .boton-socio {
+      margin-top: 1.2rem;
       width: 100%;
-      justify-content: center;
+      padding: 0.9rem 1.25rem;
+      font-size: 0.75rem;
     }
 
-    .menu-toggle:checked ~ .menu {
+    .velo {
       display: block;
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background: rgba(47, 42, 33, 0.4);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 180ms ease, visibility 180ms;
+      cursor: default;
     }
 
-    .menu-toggle:checked + .menu-boton span:nth-child(1) {
-      transform: translateY(7px) rotate(45deg);
+    .interruptor:checked ~ .franja .navegacion {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
     }
-    .menu-toggle:checked + .menu-boton span:nth-child(2) {
+
+    .interruptor:checked ~ .velo {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .interruptor:checked ~ .franja .boton-menu span:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+
+    .interruptor:checked ~ .franja .boton-menu span:nth-child(2) {
       opacity: 0;
     }
-    .menu-toggle:checked + .menu-boton span:nth-child(3) {
-      transform: translateY(-7px) rotate(-45deg);
+
+    .interruptor:checked ~ .franja .boton-menu span:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg);
     }
   }
 </style>
