@@ -1,6 +1,5 @@
 ---
 import { site, menu } from '../site.config';
-import Banderines from './Banderines.astro';
 
 const ruta = Astro.url.pathname;
 const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(href));
@@ -9,11 +8,10 @@ const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(
 <header class="cabecera">
   <div class="contenedor barra">
     <a href="/" class="marca" aria-label={`${site.nombre}, inicio`}>
-      <svg viewBox="0 0 40 40" width="40" height="40" aria-hidden="true">
-        <circle cx="20" cy="20" r="20" fill="var(--azul)" />
-        <path d="M6 27 Q20 10 34 27 Z" fill="var(--verde)" />
-        <circle cx="28" cy="13" r="4" fill="var(--amarillo)" />
-        <rect x="6" y="27" width="28" height="7" rx="2" fill="var(--fucsia)" />
+      <svg viewBox="0 0 40 40" width="36" height="36" aria-hidden="true">
+        <rect width="40" height="40" rx="8" fill="var(--superficie)" stroke="var(--linea)" />
+        <circle cx="27" cy="13" r="4.5" fill="var(--oro)" />
+        <path d="M4 32 L15 18 L21 25 L27 20 L36 32 Z" fill="none" stroke="var(--texto)" stroke-width="1.8" stroke-linejoin="round" />
       </svg>
       <span class="marca-texto">
         <span class="marca-nombre">{site.nombre}</span>
@@ -39,12 +37,12 @@ const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(
       </ul>
     </nav>
   </div>
-  <Banderines />
 </header>
 
 <style>
   .cabecera {
     background: var(--fondo);
+    border-bottom: 1px solid var(--linea);
     position: relative;
     z-index: 10;
   }
@@ -54,7 +52,7 @@ const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    padding-block: 1rem;
+    padding-block: 0.9rem;
   }
 
   .marca {
@@ -68,13 +66,13 @@ const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(
   .marca-texto {
     display: flex;
     flex-direction: column;
-    line-height: 1.05;
+    line-height: 1.1;
   }
 
   .marca-nombre {
-    font-weight: 800;
-    font-size: 1.1rem;
-    letter-spacing: -0.01em;
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1.15rem;
   }
 
   .marca-pueblo {
@@ -85,7 +83,7 @@ const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(
   .menu ul {
     display: flex;
     align-items: center;
-    gap: clamp(0.75rem, 2vw, 1.75rem);
+    gap: clamp(0.75rem, 2vw, 1.9rem);
     list-style: none;
     margin: 0;
     padding: 0;
@@ -93,19 +91,24 @@ const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(
 
   .menu a:not(.btn) {
     text-decoration: none;
-    color: var(--tinta);
-    font-weight: 600;
+    color: var(--texto);
+    font-weight: 500;
+    font-size: var(--t-sm);
     padding: 0.35rem 0;
-    border-bottom: 3px solid transparent;
+    border-bottom: 2px solid transparent;
   }
 
-  .menu a:not(.btn):hover,
+  .menu a:not(.btn):hover {
+    color: var(--oro-claro);
+  }
+
   .menu a:not(.btn)[aria-current='page'] {
-    border-bottom-color: var(--amarillo);
+    color: var(--oro-claro);
+    border-bottom-color: var(--oro);
   }
 
   .menu .btn {
-    padding: 0.6rem 1.2rem;
+    padding: 0.55rem 1.1rem;
     font-size: var(--t-sm);
   }
 
@@ -113,7 +116,7 @@ const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(
     display: none;
   }
 
-  @media (max-width: 860px) {
+  @media (max-width: 880px) {
     .menu-boton {
       display: flex;
       flex-direction: column;
@@ -122,21 +125,21 @@ const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(
       width: 44px;
       height: 44px;
       cursor: pointer;
-      border-radius: 10px;
+      border-radius: 8px;
     }
 
     .menu-boton span {
       display: block;
-      height: 3px;
-      width: 26px;
+      height: 2px;
+      width: 24px;
       margin-inline: auto;
-      background: var(--tinta);
+      background: var(--texto);
       border-radius: 2px;
       transition: transform 160ms ease, opacity 160ms ease;
     }
 
     .menu-toggle:focus-visible + .menu-boton {
-      outline: 3px solid var(--amarillo);
+      outline: 2px solid var(--oro);
     }
 
     .menu {
@@ -144,8 +147,8 @@ const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(
       position: absolute;
       inset: 100% 0 auto 0;
       background: var(--fondo);
-      border-top: 1px solid var(--linea);
-      box-shadow: 0 18px 30px -20px rgba(20, 33, 61, 0.4);
+      border-bottom: 1px solid var(--linea);
+      box-shadow: 0 24px 40px -20px rgba(0, 0, 0, 0.6);
     }
 
     .menu ul {
@@ -162,10 +165,6 @@ const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(
       font-size: var(--t-md);
     }
 
-    .menu li a:not(.btn)[aria-current='page'] {
-      color: var(--fucsia);
-    }
-
     .menu-donar {
       padding-top: 1rem;
     }
@@ -180,13 +179,13 @@ const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(
     }
 
     .menu-toggle:checked + .menu-boton span:nth-child(1) {
-      transform: translateY(8px) rotate(45deg);
+      transform: translateY(7px) rotate(45deg);
     }
     .menu-toggle:checked + .menu-boton span:nth-child(2) {
       opacity: 0;
     }
     .menu-toggle:checked + .menu-boton span:nth-child(3) {
-      transform: translateY(-8px) rotate(-45deg);
+      transform: translateY(-7px) rotate(-45deg);
     }
   }
 </style>

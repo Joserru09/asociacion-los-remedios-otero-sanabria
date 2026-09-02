@@ -40,7 +40,8 @@ const { nombre, precio, imagen, enlaceCompra, tallas, agotado } = producto.data;
     position: relative;
     border-radius: var(--radio);
     overflow: hidden;
-    background: var(--fondo-suave);
+    background: var(--superficie);
+    border: 1px solid var(--linea);
   }
 
   .foto img {
@@ -51,16 +52,17 @@ const { nombre, precio, imagen, enlaceCompra, tallas, agotado } = producto.data;
   }
 
   .agotado .foto img {
-    filter: grayscale(0.6);
-    opacity: 0.8;
+    filter: grayscale(0.7);
+    opacity: 0.55;
   }
 
   .etiqueta {
     position: absolute;
     top: 1rem;
     left: 1rem;
-    background: var(--tinta);
-    color: #fff;
+    background: var(--fondo);
+    border: 1px solid var(--linea);
+    color: var(--texto);
     padding: 0.3rem 0.8rem;
     border-radius: 999px;
     font-size: var(--t-sm);
@@ -73,8 +75,8 @@ const { nombre, precio, imagen, enlaceCompra, tallas, agotado } = producto.data;
 
   .precio {
     font-size: var(--t-md);
-    font-weight: 800;
-    color: var(--azul);
+    font-weight: 700;
+    color: var(--oro-claro);
     margin-bottom: 0.75rem;
   }
 

@@ -39,6 +39,9 @@ export const pagos = {
   // Payment Link de la cuota de socio (recurrente anual o pago único). CAMBIAR
   cuotaSocioStripe: 'https://buy.stripe.com/CAMBIAR_SOCIO',
   cuotaSocioEuros: 20, // CAMBIAR
+  // Enlace PayPal.Me para quien prefiera PayPal (p. ej. 'https://paypal.me/aclosremedios').
+  // Déjalo vacío y no se mostrará la opción.
+  paypal: '',
   bizum: '6XX XXX XXX', // CAMBIAR: número de Bizum de la asociación
   iban: 'ES00 0000 0000 0000 0000 0000', // CAMBIAR
   titular: 'Asociación Cultural Los Remedios',

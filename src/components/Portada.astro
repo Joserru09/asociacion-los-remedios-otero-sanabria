@@ -9,8 +9,9 @@ const { titulo, entradilla } = Astro.props;
 
 <div class="portada">
   <div class="contenedor">
+    <p class="hilo" aria-hidden="true"></p>
     <h1>{titulo}</h1>
-    {entradilla && <p>{entradilla}</p>}
+    {entradilla && <p class="entradilla">{entradilla}</p>}
   </div>
 </div>
 
@@ -21,12 +22,16 @@ const { titulo, entradilla } = Astro.props;
 
   .portada h1 {
     font-size: clamp(2.5rem, 6vw, 4.25rem);
-    letter-spacing: -0.035em;
-    color: var(--azul);
     margin-bottom: 0.75rem;
   }
 
-  .portada p {
+  .hilo {
+    width: 3.5rem;
+    border-top: 2px solid var(--oro);
+    margin: 0 0 1.5rem;
+  }
+
+  .entradilla {
     font-size: var(--t-md);
     color: var(--texto-suave);
     max-width: 52ch;

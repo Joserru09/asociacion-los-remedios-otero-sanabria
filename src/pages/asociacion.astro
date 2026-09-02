@@ -35,7 +35,7 @@ const junta = [
         </p>
       </div>
 
-      <aside class="junta">
+      <aside class="junta panel">
         <h2>La junta</h2>
         <dl>
           {junta.map((j) => (
@@ -62,7 +62,7 @@ const junta = [
       <div>
         <h2>Redes</h2>
         <p>Avisos rápidos por el canal de WhatsApp, fotos en Instagram y Facebook.</p>
-        <Redes class="redes-oscuras" />
+        <Redes />
       </div>
       <div>
         <h2>Documentos</h2>
@@ -86,16 +86,6 @@ const junta = [
     align-items: start;
   }
 
-  .junta {
-    background: var(--azul);
-    color: #fff;
-    padding: 2rem;
-    border-radius: var(--radio);
-  }
-
-  .junta h2 {
-    color: #fff;
-  }
 
   .junta dl {
     margin: 0 0 1rem;
@@ -105,17 +95,17 @@ const junta = [
 
   .junta dt {
     font-size: var(--t-sm);
-    opacity: 0.8;
+    color: var(--texto-suave);
   }
 
   .junta dd {
     margin: 0;
-    font-weight: 700;
+    font-weight: 600;
+    color: var(--tinta);
     font-size: var(--t-md);
   }
 
   .junta .meta {
-    color: rgba(255, 255, 255, 0.75);
     margin: 0;
   }
 
@@ -129,10 +119,6 @@ const junta = [
     color: var(--texto-suave);
   }
 
-  .tres :global(.redes-oscuras a) {
-    background: var(--tinta);
-    color: #fff;
-  }
 
   @media (max-width: 860px) {
     .dos,

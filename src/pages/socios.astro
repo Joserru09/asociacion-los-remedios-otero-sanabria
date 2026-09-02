@@ -88,14 +88,15 @@ import { euros } from '../utils/fecha';
   }
 
   .ventajas li::marker {
-    color: var(--verde);
+    color: var(--oro);
   }
 
   .cuota {
     display: inline-flex;
     flex-direction: column;
-    background: var(--verde);
-    color: #fff;
+    background: var(--superficie);
+    border: 1px solid var(--linea);
+    border-left: 3px solid var(--oro);
     padding: 1.25rem 1.75rem;
     border-radius: var(--radio);
     margin: 0;
@@ -103,13 +104,15 @@ import { euros } from '../utils/fecha';
 
   .cuota span {
     font-size: var(--t-sm);
-    opacity: 0.9;
+    color: var(--texto-suave);
   }
 
   .cuota strong {
+    font-family: var(--serif);
+    font-weight: 600;
+    color: var(--oro-claro);
     font-size: var(--t-xl);
-    line-height: 1;
-    letter-spacing: -0.03em;
+    line-height: 1.1;
   }
 
   .pasos ol {
@@ -134,9 +137,10 @@ import { euros } from '../utils/fecha';
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
-    background: var(--amarillo);
-    color: var(--tinta);
-    font-weight: 800;
+    background: var(--superficie);
+    border: 1px solid var(--oro);
+    color: var(--oro-claro);
+    font-weight: 700;
     display: grid;
     place-items: center;
   }

@@ -4,7 +4,7 @@ import Portada from '../components/Portada.astro';
 import { pagos, site } from '../site.config';
 ---
 
-<Base titulo="Donaciones" descripcion="Apoya a la asociación cultural de Otero de Sanabria con una donación por Bizum, tarjeta o transferencia.">
+<Base titulo="Donaciones" descripcion="Apoya a la asociación cultural de Otero de Sanabria con una donación por Bizum, tarjeta, PayPal o transferencia.">
   <Portada
     titulo="Echa una mano"
     entradilla="La asociación se sostiene con las cuotas, la barra de las fiestas y lo que cada uno aporta. Todo lo que entra se gasta en el pueblo."
@@ -12,21 +12,32 @@ import { pagos, site } from '../site.config';
 
   <section class="seccion formas">
     <div class="contenedor rejilla">
-      <div class="forma bizum">
+      <div class="panel">
         <h2>Bizum</h2>
         <p>La forma más rápida si estás en España. Sin comisiones para la asociación.</p>
         <p class="dato">{pagos.bizum}</p>
         <p class="nota">Pon en el concepto «Donación» y, si quieres, tu nombre para agradecértelo.</p>
       </div>
 
-      <div class="forma tarjeta">
+      <div class="panel">
         <h2>Con tarjeta</h2>
-        <p>Desde cualquier país, con tarjeta, Apple Pay o Google Pay. Eliges el importe.</p>
+        <p>
+          Desde cualquier país. El botón te lleva a una página de pago externa y segura (Stripe): la web del pueblo no ve ni guarda ningún dato de tu tarjeta.
+        </p>
         <a class="btn btn-primario" href={pagos.donacionStripe} target="_blank" rel="noopener">Donar con tarjeta</a>
-        <p class="nota">Pago seguro a través de Stripe. La asociación asume la comisión.</p>
+        <p class="nota">Admite tarjeta, Apple Pay y Google Pay. Eliges tú el importe.</p>
       </div>
 
-      <div class="forma transferencia">
+      {pagos.paypal && (
+        <div class="panel">
+          <h2>PayPal</h2>
+          <p>Si prefieres usar tu cuenta de PayPal.</p>
+          <a class="btn btn-secundario" href={pagos.paypal} target="_blank" rel="noopener">Donar con PayPal</a>
+          <p class="nota">Se abre la página oficial de PayPal.</p>
+        </div>
+      )}
+
+      <div class="panel">
         <h2>Transferencia</h2>
         <p>Para donaciones grandes o si prefieres hacerlo desde tu banco.</p>
         <p class="dato dato-iban">{pagos.iban}</p>
@@ -61,35 +72,33 @@ import { pagos, site } from '../site.config';
 
   .rejilla {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
     gap: 1.25rem;
   }
 
-  .forma {
-    border-radius: var(--radio);
-    padding: 2rem;
+  .panel {
     display: flex;
     flex-direction: column;
   }
 
-  .forma h2 {
+  .panel h2 {
     font-size: var(--t-lg);
   }
 
-  .forma > p:first-of-type {
+  .panel > p:first-of-type {
     flex: 1;
+    color: var(--texto-suave);
   }
 
-  .forma .btn {
+  .panel .btn {
     align-self: flex-start;
     margin-bottom: 0.75rem;
   }
 
   .dato {
     font-size: var(--t-xl);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--tinta);
+    font-weight: 700;
+    color: var(--oro-claro);
     margin-bottom: 0.5rem;
     user-select: all;
   }
@@ -103,35 +112,5 @@ import { pagos, site } from '../site.config';
     font-size: var(--t-sm);
     color: var(--texto-suave);
     margin: 0;
-  }
-
-  .bizum {
-    background: #e9f7f0;
-  }
-
-  .bizum h2 {
-    color: var(--verde);
-  }
-
-  .tarjeta {
-    background: #fdeaf1;
-  }
-
-  .tarjeta h2 {
-    color: var(--fucsia);
-  }
-
-  .transferencia {
-    background: var(--fondo-suave);
-  }
-
-  .transferencia h2 {
-    color: var(--azul);
-  }
-
-  @media (max-width: 900px) {
-    .rejilla {
-      grid-template-columns: 1fr;
-    }
   }
 </style>

@@ -89,7 +89,9 @@ encarga del cobro, la dirección de envío y el recibo.
    desplegable llamado «Talla» y activa «Recoger dirección de envío».
 4. Para donaciones, crea un enlace con «El cliente elige el precio».
 5. Para la cuota de socio, un enlace de pago único (o una suscripción anual si preferís que se renueve sola).
-6. Pega cada URL en el fichero correspondiente (`enlaceCompra` de cada producto, `pagos.*` en `site.config.ts`).
+6. Opcional: si la asociación tiene PayPal, pon el enlace PayPal.Me en `pagos.paypal` y aparecerá como forma de
+   donar. Si queda vacío, la opción no se muestra.
+7. Pega cada URL en el fichero correspondiente (`enlaceCompra` de cada producto, `pagos.*` en `site.config.ts`).
 
 Los pedidos llegan al panel de Stripe (y por correo si lo activas). El stock se sigue controlando a mano.
 
@@ -134,7 +136,7 @@ public/                 Ficheros que se copian tal cual (favicon, robots.txt, og
 
 - **Sin frameworks de CSS ni JavaScript en el cliente.** El único JS que carga el navegador es cero; el menú
   móvil funciona con CSS. Menos dependencias que mantener.
-- **Fuente autoalojada** (`@fontsource-variable/bricolage-grotesque`): no se hacen peticiones a Google Fonts.
+- **Fuentes autoalojadas** (Fraunces para títulos, Instrument Sans para texto): no se hacen peticiones a Google Fonts.
 - **Imágenes optimizadas en build** con `astro:assets`: sube JPG normales y Astro genera WebP redimensionados.
 - **`trailingSlash: 'always'`**: todas las URL terminan en `/`, como las genera Cloudflare Pages, para evitar
   redirecciones y duplicados en buscadores.

@@ -27,7 +27,7 @@ const og = imagen ?? new URL('/og.png', site.url).toString();
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title={`Novedades de ${site.nombre}`} href="/rss.xml" />
-    <meta name="theme-color" content="#1d4e9a" />
+    <meta name="theme-color" content="#12161e" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.nombre} />
     <meta property="og:title" content={tituloCompleto} />
@@ -52,12 +52,13 @@ const og = imagen ?? new URL('/og.png', site.url).toString();
     position: absolute;
     left: 1rem;
     top: -4rem;
-    background: var(--tinta);
-    color: #fff;
+    background: var(--oro);
+    color: var(--oro-tinta);
     padding: 0.6rem 1rem;
-    border-radius: 0 0 0.75rem 0.75rem;
+    border-radius: 0 0 0.5rem 0.5rem;
     z-index: 100;
     text-decoration: none;
+    font-weight: 600;
   }
 
   .saltar:focus {

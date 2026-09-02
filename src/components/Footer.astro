@@ -32,17 +32,18 @@ const año = new Date().getFullYear();
 
 <style>
   .pie {
-    background: var(--tinta);
-    color: #d7deeb;
+    background: #0d1117;
+    border-top: 1px solid var(--linea);
+    color: var(--texto-suave);
     margin-top: auto;
   }
 
   .pie a {
-    color: #fff;
+    color: var(--texto);
   }
 
   .pie a:hover {
-    color: var(--amarillo);
+    color: var(--oro-claro);
   }
 
   .pie-grid {
@@ -53,8 +54,9 @@ const año = new Date().getFullYear();
   }
 
   .pie-nombre {
-    color: #fff;
-    font-weight: 800;
+    font-family: var(--serif);
+    color: var(--tinta);
+    font-weight: 600;
     font-size: var(--t-md);
     margin-bottom: 0.25rem;
   }
@@ -73,6 +75,7 @@ const año = new Date().getFullYear();
 
   .pie nav a {
     text-decoration: none;
+    font-size: var(--t-sm);
   }
 
   .pie nav a:hover {
@@ -84,7 +87,7 @@ const año = new Date().getFullYear();
   }
 
   .pie-legal {
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 1px solid var(--linea);
     padding-block: 1.25rem;
     font-size: var(--t-sm);
   }
