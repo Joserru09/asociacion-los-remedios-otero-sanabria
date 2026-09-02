@@ -1,1 +1,8 @@
+# Artefactos de Windows
 *:Zone.Identifier
+
+# Dependencias y salida de la compilación: se regeneran con `npm ci` y `npm run build`.
+# (Ojo: parte de node_modules quedó versionada de antes; esto solo evita que crezca más.
+#  Para sacarla del todo: `git rm -r --cached node_modules` en un commit aparte.)
+node_modules/
+dist/
