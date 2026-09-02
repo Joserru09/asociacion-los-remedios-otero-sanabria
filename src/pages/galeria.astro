@@ -2,80 +2,269 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Portada from '../components/Portada.astro';
+import Icono from '../components/Icono.astro';
 import { galeria } from '../data/galeria';
-import { redes } from '../site.config';
+import { site, redes } from '../site.config';
 
 const fotos = import.meta.glob<{ default: ImageMetadata }>('../assets/galeria/*.{jpg,jpeg,png,webp}', {
   eager: true,
 });
 
-const lista = galeria.map((g) => {
+const lista = galeria.map((g, i) => {
   const mod = fotos[`../assets/galeria/${g.fichero}`];
   if (!mod) throw new Error(`Falta la foto src/assets/galeria/${g.fichero} declarada en src/data/galeria.ts`);
-  return { ...g, src: mod.default };
+  return { ...g, src: mod.default, id: `foto-${i + 1}`, indice: i };
 });
+
 ---
 
-<Base titulo="Galería" descripcion="Fotos de Otero de Sanabria: fiestas, paisajes y gente del pueblo.">
+<Base titulo="Galería" descripcion={`Fotos de ${site.pueblo}: fiestas, paisajes, patrimonio y gente del pueblo.`}>
   <Portada
-    titulo="Fotos"
+    rotulo="El pueblo en fotos"
+    titulo="Galería"
     entradilla="Fiestas, prados, nevadas y lo que da de sí el pueblo cada año. Si tienes fotos buenas, mándanoslas y las subimos con tu nombre."
   />
-  <section class="seccion galeria">
+
+  <section class="seccion" id="galeria">
     <div class="contenedor">
       <div class="mosaico">
-        {lista.map((f) => (
-          <figure>
-            <a href={f.src.src} target="_blank" rel="noopener" aria-label={`Abrir la foto: ${f.pie}`}>
-              <Image src={f.src} alt={f.pie} width={900} widths={[480, 900]} sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 33vw" loading="lazy" />
-            </a>
-            <figcaption>{f.pie}</figcaption>
-          </figure>
-        ))}
+        {
+          lista.map((f) => (
+            <figure class="celda">
+              <a href={`#${f.id}`} aria-label={`Ampliar la foto: ${f.pie}`}>
+                <Image
+                  src={f.src}
+                  alt={f.pie}
+                  width={1000}
+                  widths={[420, 700, 1000]}
+                  sizes="(max-width: 620px) 92vw, (max-width: 1000px) 46vw, 30vw"
+                  loading="lazy"
+                />
+                <span class="lupa" aria-hidden="true">
+                  <Icono nombre="camara" tamano={18} />
+                </span>
+              </a>
+              <figcaption>{f.pie}</figcaption>
+            </figure>
+          ))
+        }
       </div>
-      {redes.instagram && (
-        <p class="mas">
-          Las fotos del día a día están en <a href={redes.instagram} target="_blank" rel="noopener">Instagram</a>.
-        </p>
-      )}
+
+      <p class="mas">
+        Las fotos del día a día están en{' '}
+        {redes.instagram ? (
+          <a href={redes.instagram} target="_blank" rel="noopener">
+            Instagram
+          </a>
+        ) : (
+          'nuestras redes'
+        )}. ¿Tienes alguna buena? Mándala a <a href={`mailto:${site.email}`}>{site.email}</a> y la publicamos
+        con tu nombre.
+      </p>
     </div>
   </section>
+
+  {/* Visor a pantalla completa. Funciona solo con CSS, con el ancla de cada foto. */}
+  {
+    lista.map((f, i) => (
+      <div class="visor" id={f.id} role="dialog" aria-label={f.pie}>
+        <a class="fondo-visor" href="#galeria" aria-label="Cerrar la foto" />
+        <figure class="visor-marco">
+          <Image src={f.src} alt={f.pie} width={1600} widths={[800, 1600]} sizes="92vw" loading="lazy" />
+          <figcaption>
+            <span>{f.pie}</span>
+            <span class="contador">
+              {i + 1} / {lista.length}
+            </span>
+          </figcaption>
+        </figure>
+        <a class="cerrar" href="#galeria" aria-label="Cerrar">
+          <Icono nombre="cerrar" tamano={20} />
+        </a>
+        {i > 0 && (
+          <a class="nav anterior" href={`#${lista[i - 1].id}`} aria-label="Foto anterior">
+            <Icono nombre="chevron" tamano={22} />
+          </a>
+        )}
+        {i < lista.length - 1 && (
+          <a class="nav siguiente" href={`#${lista[i + 1].id}`} aria-label="Foto siguiente">
+            <Icono nombre="chevron" tamano={22} />
+          </a>
+        )}
+      </div>
+    ))
+  }
 </Base>
 
 <style>
-  .galeria {
-    padding-top: 1rem;
-  }
-
   .mosaico {
-    columns: 3 18rem;
-    column-gap: 1.25rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(16rem, 100%), 1fr));
+    gap: clamp(1rem, 2vw, 1.5rem);
   }
 
-  figure {
-    margin: 0 0 1.25rem;
-    break-inside: avoid;
+  .celda {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
   }
 
-  figure a {
+  .celda > a {
+    position: relative;
     display: block;
+    aspect-ratio: 4 / 3;
     border-radius: var(--radio);
     overflow: hidden;
+    border: 1px solid var(--linea);
+    background: var(--crema-3);
   }
 
-  figure img {
+  .celda :global(img) {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 450ms ease;
+  }
+
+  .celda > a:hover :global(img) {
+    transform: scale(1.04);
+  }
+
+  .lupa {
+    position: absolute;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(251, 247, 237, 0.92);
+    color: var(--verde);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+
+  .celda > a:hover .lupa,
+  .celda > a:focus-visible .lupa {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   figcaption {
-    margin-top: 0.5rem;
-    color: var(--texto-suave);
+    margin-top: 0.55rem;
+    color: var(--tinta-suave);
     font-size: var(--t-sm);
+    line-height: 1.45;
   }
 
   .mas {
-    margin-top: 2rem;
-    color: var(--texto-suave);
+    margin-top: clamp(2rem, 4vw, 3rem);
+    color: var(--tinta-media);
+    max-width: 62ch;
   }
+
+  /* ---------- Visor ---------- */
+
+  .visor {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    padding: clamp(1rem, 4vw, 3rem);
+    place-items: center;
+  }
+
+  .visor:target {
+    display: grid;
+  }
+
+  .fondo-visor {
+    position: absolute;
+    inset: 0;
+    background: rgba(31, 38, 21, 0.93);
+    cursor: zoom-out;
+  }
+
+  .visor-marco {
+    position: relative;
+    margin: 0;
+    max-width: min(70rem, 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .visor-marco :global(img) {
+    width: 100%;
+    height: auto;
+    max-height: 78vh;
+    object-fit: contain;
+    border-radius: var(--radio);
+  }
+
+  .visor-marco figcaption {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    margin: 0;
+    color: var(--sobre-verde);
+    font-size: var(--t-sm);
+  }
+
+  .contador {
+    color: var(--verde-claro);
+    font-variant-numeric: tabular-nums;
+    flex: none;
+  }
+
+  .cerrar,
+  .nav {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(251, 247, 237, 0.14);
+    border: 1px solid rgba(251, 247, 237, 0.35);
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 160ms ease;
+  }
+
+  .cerrar:hover,
+  .nav:hover {
+    background: rgba(251, 247, 237, 0.28);
+    color: #fff;
+  }
+
+  .cerrar {
+    top: clamp(0.75rem, 2vw, 1.5rem);
+    right: clamp(0.75rem, 2vw, 1.5rem);
+  }
+
+  .nav {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .anterior {
+    left: clamp(0.5rem, 2vw, 1.5rem);
+  }
+
+  .anterior :global(svg) {
+    transform: rotate(90deg);
+  }
+
+  .siguiente {
+    right: clamp(0.5rem, 2vw, 1.5rem);
+  }
+
+  .siguiente :global(svg) {
+    transform: rotate(-90deg);
+  }
+
 </style>

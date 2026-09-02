@@ -1,1 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" rx="8" fill="#1c2430"/><circle cx="27" cy="13" r="4.5" fill="#d3a04b"/><path d="M4 32 L15 18 L21 25 L27 20 L36 32 Z" fill="none" stroke="#e6e2d6" stroke-width="1.8" stroke-linejoin="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="AC Los Remedios, Otero de Sanabria">
+  <rect width="64" height="64" rx="12" fill="#fbf7ed"/>
+  <g fill="none" stroke="#3d4a28" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 52V30c0-9.4 6.6-16 20-16s20 6.6 20 16v22"/>
+    <path d="M9 52h46"/>
+    <path d="M26 52V24h12v28"/>
+    <path d="M23.5 24 32 12l8.5 12"/>
+    <path d="M32 12V6M28.5 8.7h7"/>
+    <path d="M28.5 34v-3a3.5 3.5 0 0 1 7 0v3z"/>
+    <path d="M38 52V38h10v14"/>
+    <path d="M35.5 38 43 32.5l7.5 5.5"/>
+    <path d="M16 52V40h10v12"/>
+    <path d="M13.5 40 21 34.5l7.5 5.5"/>
+  </g>
+</svg>

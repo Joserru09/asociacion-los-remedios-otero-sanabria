@@ -1,0 +1,158 @@
+---
+import Base from '../layouts/Base.astro';
+import Portada from '../components/Portada.astro';
+import TituloSeccion from '../components/TituloSeccion.astro';
+import Icono from '../components/Icono.astro';
+import { site } from '../site.config';
+
+/**
+ * CAMBIAR: el calendario de actividades del año. Es la página que más se
+ * consulta, así que conviene repasarla cada primavera.
+ */
+const actividades = [
+  {
+    icono: 'hoja' as const,
+    titulo: 'Limpieza de la fuente y el lavadero',
+    cuando: 'Un sábado de julio',
+    texto:
+      'Quedamos a las diez de la mañana con guantes y ganas. Se desbroza, se limpia el pilón y se repasa lo que haga falta. El almuerzo lo pone la asociación.',
+  },
+  {
+    icono: 'copa' as const,
+    titulo: 'Fiestas de Los Remedios',
+    cuando: 'Fin de semana grande de agosto',
+    texto:
+      'Pregón, sardinada, verbena con orquesta, juegos, paellada, campeonato de tute y la misa y procesión del domingo.',
+    enlace: '/fiestas/',
+  },
+  {
+    icono: 'gente' as const,
+    titulo: 'Paellada popular',
+    cuando: 'Sábado de fiestas, 14:30',
+    texto:
+      'La comida que más gente junta del año. Hay que apuntarse antes del jueves: las plazas se acaban y los socios tienen prioridad.',
+  },
+  {
+    icono: 'campana' as const,
+    titulo: 'Juegos tradicionales',
+    cuando: 'Sábado de fiestas, 12:00',
+    texto:
+      'Para los peques y los que no lo son tanto: carreras de sacos, la cuerda, los bolos y lo que se nos ocurra ese año.',
+  },
+  {
+    icono: 'hoja' as const,
+    titulo: 'Magosto',
+    cuando: 'Primer domingo de noviembre',
+    texto: 'Castañas, vino nuevo y una tarde alrededor del fuego cuando ya no queda nadie de veraneo.',
+  },
+  {
+    icono: 'documento' as const,
+    titulo: 'Asamblea general de socios',
+    cuando: 'Primavera',
+    texto:
+      'Se presentan las cuentas del año, se renueva la junta si toca y se decide en qué se gasta el dinero. Un socio, un voto.',
+  },
+];
+---
+
+<Base
+  titulo="Actividades"
+  descripcion={`Lo que organizamos cada año en ${site.pueblo}: limpieza de la fuente, fiestas de agosto, paellada, magosto y la asamblea de socios.`}
+>
+  <Portada
+    rotulo="Todo el año"
+    titulo="Actividades"
+    entradilla="Esto es lo que hacemos cada año. Las fechas exactas se anuncian en el tablón y en el canal de WhatsApp unas semanas antes."
+  />
+
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="rejilla-2">
+        {
+          actividades.map((a) => (
+            <article class="actividad panel">
+              <span class="icono">
+                <Icono nombre={a.icono} tamano={20} />
+              </span>
+              <p class="cuando">{a.cuando}</p>
+              <h2>{a.titulo}</h2>
+              <p class="texto">{a.texto}</p>
+              {a.enlace && (
+                <a href={a.enlace} class="enlace-flecha">
+                  Ver el programa
+                </a>
+              )}
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion seccion-crema">
+    <div class="contenedor">
+      <TituloSeccion
+        titulo="¿Se te ocurre algo?"
+        entradilla="Un taller, un concierto, una ruta, una charla. Si tienes una idea y ganas de echar una mano para sacarla adelante, la asociación pone lo que haga falta."
+      />
+      <div class="centrar">
+        <a class="btn btn-verde" href="/contacto/">
+          <Icono nombre="megafono" tamano={15} />
+          Cuéntanosla
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .actividad {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--papel);
+  }
+
+  .icono {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--verde-velo);
+    color: var(--verde-medio);
+    margin-bottom: 1rem;
+  }
+
+  .cuando {
+    margin: 0 0 0.3rem;
+    font-size: var(--t-xs);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--terracota-osc);
+  }
+
+  .actividad h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+
+  .texto {
+    margin: 0 0 1rem;
+    color: var(--tinta-media);
+    font-size: var(--t-sm);
+    line-height: 1.65;
+    flex: 1;
+  }
+
+  .actividad .enlace-flecha {
+    align-self: flex-start;
+  }
+
+  .centrar {
+    display: flex;
+    justify-content: center;
+  }
+</style>

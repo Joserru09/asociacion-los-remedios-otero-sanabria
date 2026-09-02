@@ -1,0 +1,74 @@
+---
+/**
+ * Título de sección: versalitas espaciadas con una ramita a cada lado.
+ * Es el remate que da unidad a toda la web, así que se usa siempre igual.
+ */
+import Adorno from './Adorno.astro';
+
+interface Props {
+  titulo: string;
+  entradilla?: string;
+  /** Nivel del encabezado; en las páginas interiores el h1 ya está en la portada. */
+  nivel?: 'h2' | 'h3';
+  alineacion?: 'centro' | 'izquierda';
+  class?: string;
+}
+const { titulo, entradilla, nivel: Etiqueta = 'h2', alineacion = 'centro', class: clase = '' } = Astro.props;
+---
+
+<div class:list={['titulo-seccion', alineacion, clase]}>
+  <Etiqueta>
+    <Adorno tipo="rama" class="rama izquierda" />
+    <span>{titulo}</span>
+    <Adorno tipo="rama" espejo class="rama derecha" />
+  </Etiqueta>
+  {entradilla && <p class="entradilla-seccion">{entradilla}</p>}
+</div>
+
+<style>
+  .titulo-seccion {
+    margin-bottom: clamp(1.75rem, 3.5vw, 2.75rem);
+  }
+
+  .titulo-seccion :global(h2),
+  .titulo-seccion :global(h3) {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 2vw, 1.5rem);
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(1.35rem, 2.8vw, 1.95rem);
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+
+  .centro :global(h2),
+  .centro :global(h3) {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .izquierda :global(.izquierda) {
+    display: none;
+  }
+
+  .entradilla-seccion {
+    margin: 0.85rem 0 0;
+    color: var(--tinta-media);
+    max-width: 58ch;
+    font-size: var(--t-base);
+  }
+
+  .centro .entradilla-seccion {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  @media (max-width: 560px) {
+    .titulo-seccion :global(.rama) {
+      width: 34px;
+    }
+  }
+</style>

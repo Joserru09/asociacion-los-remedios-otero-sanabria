@@ -1,0 +1,137 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Portada from '../../components/Portada.astro';
+import NoticiaCard from '../../components/NoticiaCard.astro';
+import Icono from '../../components/Icono.astro';
+import { whatsappActivo } from '../../site.config';
+
+const noticias = (await getCollection('noticias')).sort(
+  (a, b) => b.data.fecha.getTime() - a.data.fecha.getTime(),
+);
+
+// Agrupadas por año para que el tablón no sea una lista infinita
+const porAño = new Map<number, typeof noticias>();
+for (const n of noticias) {
+  const y = n.data.fecha.getFullYear();
+  porAño.set(y, [...(porAño.get(y) ?? []), n]);
+}
+
+const canal = whatsappActivo();
+---
+
+<Base
+  titulo="Noticias"
+  descripcion="Tablón de noticias de la asociación: fiestas, actividades, asambleas y avisos de Otero de Sanabria."
+>
+  <Portada
+    rotulo="El tablón del pueblo"
+    titulo="Noticias"
+    entradilla="Todo lo que pasa en el pueblo y en la asociación. Lo mismo que mandamos por el canal de WhatsApp, pero ordenado y sin perderse."
+  />
+
+  <section class="seccion">
+    <div class="contenedor">
+      {noticias.length === 0 && <p class="vacio">Todavía no hay noticias publicadas. La primera aparecerá aquí.</p>}
+
+      {
+        [...porAño.entries()].map(([año, lista]) => (
+          <div class="año">
+            <div class="año-cabecera">
+              <h2>{año}</h2>
+              <span class="cuenta">
+                {lista.length} {lista.length === 1 ? 'publicación' : 'publicaciones'}
+              </span>
+            </div>
+            <div class="rejilla-noticias">
+              {lista.map((n) => (
+                <NoticiaCard noticia={n} />
+              ))}
+            </div>
+          </div>
+        ))
+      }
+
+      <aside class="aviso panel">
+        <Icono nombre="campana" tamano={22} />
+        <div>
+          <h2>¿Prefieres que te avisemos?</h2>
+          <p>
+            Suscríbete <a href="/rss.xml">por RSS</a>{canal ? ' o únete al ' : ''}
+            {canal && (
+              <a href={canal} target="_blank" rel="noopener">
+                canal de WhatsApp
+              </a>
+            )}. Publicamos lo mismo en los dos sitios.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .año {
+    margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .año-cabecera {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .año-cabecera h2 {
+    margin: 0;
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-weight: 400;
+    color: var(--verde-medio);
+  }
+
+  .cuenta {
+    font-size: var(--t-xs);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+  }
+
+  .rejilla-noticias {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: clamp(1.25rem, 2.5vw, 1.75rem);
+  }
+
+  .vacio {
+    color: var(--tinta-suave);
+  }
+
+  .aviso {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.15rem;
+    align-items: start;
+    background: var(--verde-velo);
+    border-color: var(--verde-claro);
+  }
+
+  .aviso :global(svg) {
+    color: var(--verde-medio);
+    margin-top: 0.2rem;
+  }
+
+  .aviso h2 {
+    margin: 0 0 0.3rem;
+    font-size: var(--t-md);
+    font-weight: 600;
+  }
+
+  .aviso p {
+    margin: 0;
+    color: var(--tinta-media);
+    font-size: var(--t-sm);
+  }
+</style>

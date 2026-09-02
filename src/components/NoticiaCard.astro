@@ -1,0 +1,169 @@
+---
+/**
+ * Tarjeta del tablón: la foto con la fecha en una pastilla encima,
+ * el titular y dos líneas de resumen.
+ */
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { fechaCorta, iso } from '../utils/fecha';
+
+interface Props {
+  noticia: CollectionEntry<'noticias'>;
+  /** La primera del tablón se muestra más grande en la portada. */
+  destacada?: boolean;
+}
+const { noticia, destacada = false } = Astro.props;
+const f = fechaCorta(noticia.data.fecha);
+const href = `/noticias/${noticia.id}/`;
+const { titulo, resumen, imagen, fecha } = noticia.data;
+---
+
+<article class:list={['noticia', { destacada }]}>
+  <a href={href} class="lienzo" tabindex="-1" aria-hidden="true">
+    {
+      imagen ? (
+        <Image
+          src={imagen}
+          alt=""
+          width={720}
+          widths={[380, 720]}
+          sizes="(max-width: 600px) 92vw, (max-width: 1100px) 45vw, 24vw"
+          loading="lazy"
+        />
+      ) : (
+        <span class="sin-foto" />
+      )
+    }
+    <time datetime={iso(fecha)} class="pastilla">
+      <span class="dia">{f.dia}</span>
+      <span class="mes">{f.mes}</span>
+    </time>
+  </a>
+
+  <div class="cuerpo">
+    <h3><a href={href}>{titulo}</a></h3>
+    <p>{resumen}</p>
+    <span class="enlace-flecha">Leer más</span>
+  </div>
+</article>
+
+<style>
+  .noticia {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--papel);
+    border: 1px solid var(--linea);
+    border-radius: var(--radio);
+    overflow: hidden;
+    transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+  }
+
+  .noticia:hover {
+    border-color: var(--verde-claro);
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+  }
+
+  .lienzo {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    background: var(--crema-3);
+    overflow: hidden;
+  }
+
+  .destacada .lienzo {
+    aspect-ratio: 16 / 9;
+  }
+
+  .lienzo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 400ms ease;
+  }
+
+  .noticia:hover .lienzo :global(img) {
+    transform: scale(1.03);
+  }
+
+  .sin-foto {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(140deg, var(--crema-3), var(--verde-velo));
+  }
+
+  .pastilla {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.7rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 2.9rem;
+    padding: 0.4rem 0.5rem 0.35rem;
+    background: var(--crema);
+    border: 1px solid var(--linea);
+    border-radius: 3px;
+    line-height: 1;
+    box-shadow: 0 2px 8px -4px rgba(47, 42, 33, 0.4);
+  }
+
+  .dia {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--tinta);
+  }
+
+  .mes {
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--terracota-osc);
+    margin-top: 0.2rem;
+  }
+
+  .cuerpo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.5rem;
+    padding: 1.1rem 1.2rem 1.25rem;
+  }
+
+  .cuerpo h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .destacada .cuerpo h3 {
+    font-size: 1.45rem;
+  }
+
+  .cuerpo h3 a {
+    color: var(--tinta);
+    text-decoration: none;
+  }
+
+  .noticia:hover .cuerpo h3 a {
+    color: var(--terracota-osc);
+  }
+
+  .cuerpo p {
+    margin: 0;
+    flex: 1;
+    color: var(--tinta-media);
+    font-size: var(--t-sm);
+    line-height: 1.6;
+  }
+
+  .cuerpo .enlace-flecha {
+    margin-top: 0.35rem;
+  }
+</style>

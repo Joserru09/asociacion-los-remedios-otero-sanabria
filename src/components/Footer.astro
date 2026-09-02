@@ -1,104 +1,234 @@
 ---
-import { site, menu } from '../site.config';
-import Redes from './Redes.astro';
+import Marca from './Marca.astro';
+import Mapa from './Mapa.astro';
+import Icono from './Icono.astro';
+import { site, menuPie, menuLegal } from '../site.config';
+
 const año = new Date().getFullYear();
 ---
 
 <footer class="pie">
-  <div class="contenedor pie-grid">
-    <div>
-      <p class="pie-nombre">{site.nombreLargo}</p>
-      <p class="pie-lugar">{site.pueblo}, {site.comarca}</p>
-      <a class="pie-mail" href={`mailto:${site.email}`}>{site.email}</a>
+  <div class="contenedor rejilla-pie">
+    <div class="col-marca">
+      <Marca disposicion="columna" tono="claro" emblema={72} />
     </div>
+
+    <div>
+      <h2 class="titulo-col">Contacto</h2>
+      <ul class="datos">
+        <li>
+          <Icono nombre="pin" tamano={16} />
+          <span>
+            {site.direccion}<br />
+            {site.codigoPostal} {site.provincia}
+          </span>
+        </li>
+        <li>
+          <Icono nombre="sobre" tamano={16} />
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </li>
+        <li>
+          <Icono nombre="telefono" tamano={16} />
+          <a href={`tel:${site.telefonoEnlace}`}>{site.telefono}</a>
+        </li>
+      </ul>
+    </div>
+
     <nav aria-label="Pie de página">
-      <ul>
-        {menu.map((m) => (
-          <li><a href={m.href}>{m.label}</a></li>
+      <h2 class="titulo-col">Enlaces</h2>
+      <ul class="enlaces">
+        {menuPie.map((m) => (
+          <li>
+            <a href={m.href}>{m.label}</a>
+          </li>
         ))}
-        <li><a href="/donaciones/">Donar</a></li>
-        <li><a href="/rss.xml">Novedades por RSS</a></li>
+        <li><a href="/socios/">Hazte socio</a></li>
+        <li><a href="/rss.xml">Noticias por RSS</a></li>
       </ul>
     </nav>
-    <div class="pie-redes">
-      <p>Síguenos</p>
-      <Redes />
+
+    <div class="col-frase">
+      <p class="frase">
+        «{site.frase}»
+        <Icono nombre="corazon" tamano={14} class="corazon" />
+      </p>
+      <Mapa />
     </div>
   </div>
-  <div class="contenedor pie-legal">
-    <p>© {site.fundacion}–{año} {site.nombreLargo}. Web hecha por gente del pueblo.</p>
+
+  <div class="franja-legal">
+    <div class="contenedor legal">
+      <p>© {site.fundacion}–{año} {site.nombreLargo} · {site.pueblo} · Todos los derechos reservados</p>
+      <ul>
+        {menuLegal.map((m) => (
+          <li>
+            <a href={m.href}>{m.label}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </div>
 </footer>
 
 <style>
   .pie {
-    background: #0d1117;
-    border-top: 1px solid var(--linea);
-    color: var(--texto-suave);
+    background: var(--verde);
+    color: var(--sobre-verde-suave);
     margin-top: auto;
   }
 
-  .pie a {
-    color: var(--texto);
-  }
-
-  .pie a:hover {
-    color: var(--oro-claro);
-  }
-
-  .pie-grid {
+  .rejilla-pie {
     display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr;
-    gap: 2rem;
-    padding-block: 3rem 2rem;
+    grid-template-columns: 1.1fr 1fr 0.85fr 1.2fr;
+    gap: clamp(1.75rem, 4vw, 3.5rem);
+    padding-block: clamp(2.5rem, 5vw, 4rem) clamp(2rem, 4vw, 3rem);
+    align-items: start;
   }
 
-  .pie-nombre {
-    font-family: var(--serif);
-    color: var(--tinta);
+  .col-marca {
+    display: flex;
+    justify-content: center;
+    padding-top: 0.25rem;
+  }
+
+  .titulo-col {
+    font-family: var(--sans);
+    font-size: var(--t-xs);
     font-weight: 600;
-    font-size: var(--t-md);
-    margin-bottom: 0.25rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sobre-verde);
+    margin: 0 0 1.15rem;
   }
 
-  .pie-lugar {
-    margin-bottom: 0.75rem;
-  }
-
-  .pie nav ul {
+  .datos,
+  .enlaces {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 0.5rem;
+    gap: 0.7rem;
+    font-size: var(--t-sm);
   }
 
-  .pie nav a {
+  .datos li {
+    display: grid;
+    grid-template-columns: 1.2rem 1fr;
+    gap: 0.7rem;
+    align-items: start;
+    line-height: 1.5;
+  }
+
+  .datos :global(svg) {
+    color: var(--sobre-verde-suave);
+    margin-top: 0.15rem;
+  }
+
+  .pie a {
+    color: var(--sobre-verde-suave);
     text-decoration: none;
-    font-size: var(--t-sm);
   }
 
-  .pie nav a:hover {
+  .pie a:hover {
+    color: #fff;
     text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
-  .pie-redes p {
-    margin-bottom: 0.75rem;
+  .col-frase {
+    color: var(--sobre-verde-suave);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1.25rem;
+    text-align: right;
   }
 
-  .pie-legal {
-    border-top: 1px solid var(--linea);
-    padding-block: 1.25rem;
-    font-size: var(--t-sm);
+  .frase {
+    font-family: var(--mano);
+    font-size: 1.7rem;
+    line-height: 1.35;
+    color: var(--sobre-verde);
+    margin: 0;
+    max-width: 15ch;
   }
 
-  .pie-legal p {
+  .frase :global(.corazon) {
+    display: inline-block;
+    color: var(--terracota);
+    vertical-align: middle;
+    margin-left: 0.2rem;
+  }
+
+  .franja-legal {
+    border-top: 1px solid rgba(238, 233, 218, 0.16);
+  }
+
+  .legal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    flex-wrap: wrap;
+    padding-block: 1.15rem;
+    font-size: var(--t-xs);
+  }
+
+  .legal p {
     margin: 0;
   }
 
-  @media (max-width: 720px) {
-    .pie-grid {
+  .legal ul {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .legal a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-color: rgba(238, 233, 218, 0.35);
+  }
+
+  @media (max-width: 1000px) {
+    .rejilla-pie {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .col-marca {
+      grid-column: 1 / -1;
+      justify-content: flex-start;
+    }
+
+    .col-frase {
+      align-items: flex-start;
+      text-align: left;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .rejilla-pie {
       grid-template-columns: 1fr;
+    }
+
+    .col-marca {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .col-frase {
+      align-items: center;
+      text-align: center;
+    }
+
+    .frase {
+      max-width: none;
+    }
+
+    .legal {
+      justify-content: flex-start;
     }
   }
 </style>

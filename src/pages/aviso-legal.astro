@@ -1,0 +1,142 @@
+---
+import Base from '../layouts/Base.astro';
+import Portada from '../components/Portada.astro';
+import { site } from '../site.config';
+
+/**
+ * CAMBIAR antes de publicar: los datos identificativos de la asociación.
+ * Este texto es una base razonable para una asociación pequeña, pero conviene
+ * que lo revise alguien que entienda: no sustituye a un asesoramiento legal.
+ */
+const entidad = {
+  denominacion: site.nombreLargo,
+  cif: 'G00000000', // CAMBIAR
+  registro: 'Registro de Asociaciones de Castilla y León, nº 0000', // CAMBIAR
+  domicilio: `${site.direccion}, ${site.codigoPostal} ${site.provincia}`,
+};
+
+const actualizado = '2 de septiembre de 2026'; // CAMBIAR cuando se modifique el texto
+---
+
+<Base
+  titulo="Aviso legal"
+  descripcion={`Información legal y condiciones de uso del sitio web de la ${site.nombreLargo}.`}
+>
+  <Portada rotulo="Información legal" titulo="Aviso legal" />
+
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="prosa columna">
+        <p class="actualizado">Última actualización: {actualizado}</p>
+
+        <h2>1. Titular del sitio web</h2>
+        <p>
+          En cumplimiento del artículo 10 de la Ley 34/2002, de servicios de la sociedad de la información y de
+          comercio electrónico (LSSI-CE), se informa de los datos del titular de este sitio web:
+        </p>
+        <ul>
+          <li><strong>Denominación:</strong> {entidad.denominacion}</li>
+          <li><strong>NIF:</strong> {entidad.cif}</li>
+          <li><strong>Domicilio:</strong> {entidad.domicilio}</li>
+          <li><strong>Inscripción:</strong> {entidad.registro}</li>
+          <li><strong>Correo electrónico:</strong> <a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><strong>Teléfono:</strong> <a href={`tel:${site.telefonoEnlace}`}>{site.telefono}</a></li>
+        </ul>
+
+        <h2>2. Objeto</h2>
+        <p>
+          Este sitio web tiene por finalidad dar a conocer las actividades de la asociación, informar sobre la
+          vida del pueblo, facilitar el alta de nuevos socios y ofrecer productos cuya recaudación se destina
+          íntegramente a las actividades de la entidad. El acceso al sitio es gratuito y no requiere registro.
+        </p>
+
+        <h2>3. Condiciones de uso</h2>
+        <p>
+          Al acceder a este sitio web usted acepta las presentes condiciones. Se compromete a hacer un uso
+          adecuado de los contenidos y a no emplearlos para actividades ilícitas o lesivas para terceros. La
+          asociación se reserva el derecho de modificar en cualquier momento los contenidos, sin previo aviso.
+        </p>
+
+        <h2>4. Propiedad intelectual</h2>
+        <p>
+          Los textos, ilustraciones, dibujos y el diseño de este sitio pertenecen a la asociación. Las
+          fotografías pertenecen a sus autores, vecinos y socios que las han cedido para su publicación aquí.
+        </p>
+        <p>
+          Puedes descargar y compartir el contenido con fines personales y sin ánimo de lucro citando la fuente.
+          Para cualquier otro uso, y en particular para el uso comercial de las fotografías, escríbenos a
+          <a href={`mailto:${site.email}`}>{site.email}</a>.
+        </p>
+        <p>
+          Si apareces en alguna fotografía y no quieres que esté publicada, dínoslo y la retiramos sin
+          preguntarte por qué.
+        </p>
+
+        <h2>5. Pagos y tienda</h2>
+        <p>
+          Esta web no procesa pagos ni almacena datos bancarios. Los botones de compra, cuota de socio y
+          donación llevan a una pasarela externa (Stripe Payments Europe, Ltd.), que es quien gestiona el cobro
+          y los datos de la tarjeta bajo sus propias condiciones. Los datos de Bizum y de la cuenta bancaria que
+          aparecen en la web se facilitan para que puedas hacer la transferencia desde tu banco.
+        </p>
+        <p>
+          Para cualquier incidencia con un pedido (cambio, devolución o no recepción), escríbenos a
+          <a href={`mailto:${site.email}`}>{site.email}</a> y lo resolvemos.
+        </p>
+
+        <h2>6. Enlaces a otros sitios</h2>
+        <p>
+          Este sitio contiene enlaces a páginas de terceros (redes sociales, canal de WhatsApp, pasarela de
+          pago). No nos hacemos responsables de sus contenidos ni de sus políticas de privacidad.
+        </p>
+
+        <h2>7. Responsabilidad</h2>
+        <p>
+          La asociación procura que la información publicada sea correcta y esté al día, especialmente en lo que
+          se refiere a fechas y horarios de actividades. Aun así, los programas pueden cambiar por causas ajenas
+          a la organización (meteorología, disponibilidad de terceros) y no se asume responsabilidad por
+          eventuales errores u omisiones.
+        </p>
+
+        <h2>8. Legislación aplicable</h2>
+        <p>
+          Las presentes condiciones se rigen por la legislación española. Para cualquier controversia serán
+          competentes los juzgados y tribunales que correspondan conforme a la normativa aplicable.
+        </p>
+
+        <hr />
+
+        <p class="apunte">
+          ¿Ves algo que no encaja o que falta en esta página? Escríbenos a
+          <a href={`mailto:${site.email}`}>{site.email}</a> y lo corregimos.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .columna {
+    margin-inline: auto;
+  }
+
+  .actualizado {
+    font-size: var(--t-xs);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .prosa h2 {
+    font-size: 1.3rem;
+    letter-spacing: 0.04em;
+  }
+
+  .apunte {
+    font-size: var(--t-sm);
+    color: var(--tinta-suave);
+  }
+</style>

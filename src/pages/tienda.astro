@@ -3,83 +3,152 @@ import { getCollection, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Portada from '../components/Portada.astro';
 import ProductoCard from '../components/ProductoCard.astro';
+import TituloSeccion from '../components/TituloSeccion.astro';
+import Icono from '../components/Icono.astro';
 import { site } from '../site.config';
 
-const productos = (await getCollection('productos')).sort((a, b) => a.data.orden - b.data.orden);
+const productos = (await getCollection('productos')).sort(
+  (a, b) => Number(a.data.agotado) - Number(b.data.agotado) || a.data.orden - b.data.orden,
+);
 const conDescripcion = await Promise.all(
   productos.map(async (p) => ({ producto: p, Content: (await render(p)).Content })),
 );
+
+const pasos = [
+  {
+    icono: 'bolsa' as const,
+    titulo: 'Eliges y pagas',
+    texto:
+      'El botón «Comprar» te lleva a una página de pago externa y segura (Stripe), donde eliges la talla y pagas con tarjeta, Apple Pay o Google Pay. Esta web no ve ni guarda ningún dato de pago.',
+  },
+  {
+    icono: 'sobre' as const,
+    titulo: 'Nos llega el pedido',
+    texto:
+      'Lo preparamos entre los socios. Si vives fuera, te lo mandamos a casa; si estás en Otero o vas a venir, te lo guardamos sin gastos de envío.',
+  },
+  {
+    icono: 'corazon' as const,
+    titulo: 'Se queda en el pueblo',
+    texto:
+      'Todo lo que sacamos, quitando lo que cuesta la prenda, va a las actividades: la orquesta, la paella, las herramientas de las jornadas de limpieza.',
+  },
+];
 ---
 
-<Base titulo="Tienda" descripcion="Camisetas, sudaderas, pegatinas y más de Otero de Sanabria. Lo recaudado va a la asociación.">
+<Base
+  titulo="Tienda solidaria"
+  descripcion={`Camisetas, sudaderas, pegatinas y gorras de ${site.pueblo}. Cada compra ayuda a financiar las actividades de la asociación.`}
+>
   <Portada
-    titulo="La tienda del pueblo"
+    rotulo="Cada compra ayuda"
+    titulo="Tienda solidaria"
     entradilla="Cada camiseta paga un poco de la orquesta, la paella o el arreglo del lavadero. Y queda bien."
   />
-  <section class="seccion tienda">
+
+  <section class="seccion">
     <div class="contenedor">
-      <div class="rejilla">
-        {conDescripcion.map(({ producto, Content }) => (
-          <ProductoCard producto={producto}>
-            <Content />
-          </ProductoCard>
-        ))}
+      <div class="rejilla-productos">
+        {
+          conDescripcion.map(({ producto, Content }) => (
+            <ProductoCard producto={producto}>
+              <Content />
+            </ProductoCard>
+          ))
+        }
       </div>
     </div>
   </section>
 
-  <section class="seccion seccion-suave">
-    <div class="contenedor como">
-      <div>
-        <h2>Cómo funciona</h2>
-        <p>
-          Al pulsar «Comprar» pasas a una página de pago externa y segura (Stripe) donde eliges la talla, pones tu dirección y pagas con tarjeta, Apple Pay o Google Pay. Esta web no ve ni guarda ningún dato de pago. Nosotros recibimos el pedido y te lo mandamos o te lo guardamos para las fiestas.
-        </p>
-      </div>
-      <div>
-        <h2>Recogida en el pueblo</h2>
-        <p>
-          Si estás en Otero o vas a venir pronto, escríbenos a <a href={`mailto:${site.email}`}>{site.email}</a> y te lo reservamos sin gastos de envío. También puedes pagar por Bizum en mano.
-        </p>
-      </div>
+  <section class="seccion seccion-crema">
+    <div class="contenedor">
+      <TituloSeccion titulo="Cómo funciona" />
+      <ol class="pasos">
+        {
+          pasos.map((p, i) => (
+            <li>
+              <span class="icono">
+                <Icono nombre={p.icono} tamano={20} />
+              </span>
+              <span class="numero">{i + 1}</span>
+              <h3>{p.titulo}</h3>
+              <p>{p.texto}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <p class="recogida">
+        ¿Prefieres pagar en mano o recogerlo en el pueblo? Escríbenos a
+        <a href={`mailto:${site.email}`}>{site.email}</a> y te lo reservamos. También aceptamos Bizum.
+      </p>
     </div>
   </section>
 </Base>
 
 <style>
-  .tienda {
-    padding-top: 1rem;
-  }
-
-  .rejilla {
+  .rejilla-productos {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2.5rem 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: clamp(1.75rem, 3vw, 2.5rem);
   }
 
-  .como {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2.5rem;
-  }
-
-  .como p {
-    color: var(--texto-suave);
+  .pasos {
+    list-style: none;
     margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: clamp(1.5rem, 3vw, 2.5rem);
   }
 
-  @media (max-width: 900px) {
-    .rejilla {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    .como {
-      grid-template-columns: 1fr;
-    }
+  .pasos li {
+    position: relative;
+    text-align: center;
   }
 
-  @media (max-width: 560px) {
-    .rejilla {
-      grid-template-columns: 1fr;
-    }
+  .icono {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 0.9rem;
+    border-radius: 50%;
+    border: 1px solid var(--verde-claro);
+    background: var(--papel);
+    color: var(--verde-medio);
+  }
+
+  .numero {
+    display: block;
+    font-family: var(--serif);
+    font-size: var(--t-xs);
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--terracota-osc);
+    margin-bottom: 0.3rem;
+  }
+
+  .pasos h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .pasos p {
+    margin: 0;
+    color: var(--tinta-media);
+    font-size: var(--t-sm);
+    max-width: 38ch;
+    margin-inline: auto;
+  }
+
+  .recogida {
+    margin: clamp(2rem, 4vw, 3rem) auto 0;
+    max-width: 56ch;
+    text-align: center;
+    color: var(--tinta-media);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--linea);
   }
 </style>

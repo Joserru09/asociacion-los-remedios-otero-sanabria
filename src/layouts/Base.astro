@@ -15,6 +15,25 @@ const { titulo, descripcion = site.descripcion, imagen } = Astro.props;
 const tituloCompleto = titulo === site.nombre ? `${site.nombre}, ${site.pueblo}` : `${titulo} · ${site.nombre}`;
 const canonical = new URL(Astro.url.pathname, site.url);
 const og = imagen ?? new URL('/og.png', site.url).toString();
+
+const datos = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.nombreLargo,
+  alternateName: site.nombre,
+  url: site.url,
+  email: site.email,
+  telephone: `+34 ${site.telefono}`,
+  foundingDate: String(site.fundacion),
+  description: site.descripcion,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: site.direccion,
+    postalCode: site.codigoPostal,
+    addressRegion: site.provincia,
+    addressCountry: 'ES',
+  },
+};
 ---
 
 <!doctype html>
@@ -26,8 +45,8 @@ const og = imagen ?? new URL('/og.png', site.url).toString();
     <meta name="description" content={descripcion} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="alternate" type="application/rss+xml" title={`Novedades de ${site.nombre}`} href="/rss.xml" />
-    <meta name="theme-color" content="#12161e" />
+    <link rel="alternate" type="application/rss+xml" title={`Noticias de ${site.nombre}`} href="/rss.xml" />
+    <meta name="theme-color" content="#fbf7ed" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.nombre} />
     <meta property="og:title" content={tituloCompleto} />
@@ -36,6 +55,7 @@ const og = imagen ?? new URL('/og.png', site.url).toString();
     <meta property="og:image" content={og} />
     <meta property="og:locale" content="es_ES" />
     <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(datos)} />
   </head>
   <body>
     <a href="#contenido" class="saltar">Ir al contenido</a>
@@ -52,16 +72,18 @@ const og = imagen ?? new URL('/og.png', site.url).toString();
     position: absolute;
     left: 1rem;
     top: -4rem;
-    background: var(--oro);
-    color: var(--oro-tinta);
-    padding: 0.6rem 1rem;
-    border-radius: 0 0 0.5rem 0.5rem;
     z-index: 100;
+    background: var(--terracota);
+    color: #fff;
+    padding: 0.7rem 1.2rem;
+    border-radius: 0 0 3px 3px;
     text-decoration: none;
     font-weight: 600;
+    font-size: var(--t-sm);
   }
 
   .saltar:focus {
     top: 0;
+    color: #fff;
   }
 </style>

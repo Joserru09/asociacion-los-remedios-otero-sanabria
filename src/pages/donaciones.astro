@@ -1,116 +1,337 @@
 ---
 import Base from '../layouts/Base.astro';
 import Portada from '../components/Portada.astro';
+import TituloSeccion from '../components/TituloSeccion.astro';
+import Adorno from '../components/Adorno.astro';
+import Icono from '../components/Icono.astro';
 import { pagos, site } from '../site.config';
+
+const destinos = [
+  'La orquesta y el resto de las fiestas de Los Remedios.',
+  'La paellada, los juegos de los peques y el magosto.',
+  'Herramientas y materiales para las jornadas de limpieza.',
+  'Pequeñas reparaciones en la fuente, el lavadero y el local.',
+  'La rehabilitación del molino, que va por su tercer año.',
+];
 ---
 
-<Base titulo="Donaciones" descripcion="Apoya a la asociación cultural de Otero de Sanabria con una donación por Bizum, tarjeta, PayPal o transferencia.">
+<Base
+  titulo="Colabora"
+  descripcion={`Apoya a la ${site.nombreLargo} con una donación por Bizum, tarjeta o transferencia. Todo lo que entra se gasta en ${site.pueblo}.`}
+>
   <Portada
-    titulo="Echa una mano"
+    rotulo="Echa una mano"
+    titulo="Colabora"
     entradilla="La asociación se sostiene con las cuotas, la barra de las fiestas y lo que cada uno aporta. Todo lo que entra se gasta en el pueblo."
   />
 
-  <section class="seccion formas">
-    <div class="contenedor rejilla">
-      <div class="panel">
-        <h2>Bizum</h2>
-        <p>La forma más rápida si estás en España. Sin comisiones para la asociación.</p>
-        <p class="dato">{pagos.bizum}</p>
-        <p class="nota">Pon en el concepto «Donación» y, si quieres, tu nombre para agradecértelo.</p>
-      </div>
-
-      <div class="panel">
-        <h2>Con tarjeta</h2>
-        <p>
-          Desde cualquier país. El botón te lleva a una página de pago externa y segura (Stripe): la web del pueblo no ve ni guarda ningún dato de tu tarjeta.
-        </p>
-        <a class="btn btn-primario" href={pagos.donacionStripe} target="_blank" rel="noopener">Donar con tarjeta</a>
-        <p class="nota">Admite tarjeta, Apple Pay y Google Pay. Eliges tú el importe.</p>
-      </div>
-
-      {pagos.paypal && (
-        <div class="panel">
-          <h2>PayPal</h2>
-          <p>Si prefieres usar tu cuenta de PayPal.</p>
-          <a class="btn btn-secundario" href={pagos.paypal} target="_blank" rel="noopener">Donar con PayPal</a>
-          <p class="nota">Se abre la página oficial de PayPal.</p>
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="formas">
+        <div class="forma panel">
+          <span class="icono"><Icono nombre="telefono" tamano={20} /></span>
+          <h2>Bizum</h2>
+          <p class="que-es">La forma más rápida si estás en España. Sin comisiones para la asociación.</p>
+          <p class="dato">{pagos.bizum}</p>
+          <button class="copiar" type="button" data-copiar={pagos.bizum} hidden>
+            <Icono nombre="copiar" tamano={13} />
+            <span>Copiar</span>
+          </button>
+          <p class="nota">Pon «Donación» en el concepto y, si quieres, tu nombre para agradecértelo.</p>
         </div>
-      )}
 
-      <div class="panel">
-        <h2>Transferencia</h2>
-        <p>Para donaciones grandes o si prefieres hacerlo desde tu banco.</p>
-        <p class="dato dato-iban">{pagos.iban}</p>
-        <p class="nota">Titular: {pagos.titular}. Concepto: «Donación».</p>
+        <div class="forma panel destacada">
+          <span class="icono"><Icono nombre="corazon" tamano={20} /></span>
+          <h2>Con tarjeta</h2>
+          <p class="que-es">
+            Desde cualquier país y eligiendo tú el importe. El botón te lleva a una página de pago externa y
+            segura (Stripe): esta web no ve ni guarda ningún dato de tu tarjeta.
+          </p>
+          <a class="btn btn-terracota" href={pagos.donacionStripe} target="_blank" rel="noopener">
+            <Icono nombre="corazon" tamano={14} />
+            Donar con tarjeta
+          </a>
+          <p class="nota">Admite tarjeta, Apple Pay y Google Pay.</p>
+        </div>
+
+        {
+          pagos.paypal && (
+            <div class="forma panel">
+              <span class="icono">
+                <Icono nombre="manos" tamano={20} />
+              </span>
+              <h2>PayPal</h2>
+              <p class="que-es">Si prefieres usar tu cuenta de PayPal.</p>
+              <a class="btn btn-linea" href={pagos.paypal} target="_blank" rel="noopener">
+                Donar con PayPal
+              </a>
+              <p class="nota">Se abre la página oficial de PayPal.</p>
+            </div>
+          )
+        }
+
+        <div class="forma panel">
+          <span class="icono"><Icono nombre="documento" tamano={20} /></span>
+          <h2>Transferencia</h2>
+          <p class="que-es">Para donaciones grandes o si prefieres hacerlo desde tu banco.</p>
+          <p class="dato iban">{pagos.iban}</p>
+          <button class="copiar" type="button" data-copiar={pagos.iban.replace(/\s/g, '')} hidden>
+            <Icono nombre="copiar" tamano={13} />
+            <span>Copiar</span>
+          </button>
+          <p class="nota">Titular: {pagos.titular}. Concepto: «Donación».</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="seccion seccion-suave">
-    <div class="contenedor estrecho">
-      <h2>A dónde va el dinero</h2>
-      <p>
-        Cada año la asamblea de socios aprueba en qué se gasta. Lo habitual: la orquesta y el resto de las fiestas de Los Remedios,
-        la paellada, los juegos de los peques, las herramientas para las jornadas de limpieza y pequeñas reparaciones en la fuente,
-        el lavadero y el local.
-      </p>
-      <p>
-        Las cuentas se presentan en la asamblea anual y cualquier socio puede pedirlas por correo en
-        <a href={`mailto:${site.email}`}>{site.email}</a>.
-      </p>
-      <p>
-        Si prefieres apoyar de forma estable, <a href="/socios/">hacerte socio</a> ayuda más que una donación puntual: nos permite planificar el año.
-      </p>
+  <section class="seccion seccion-crema">
+    <div class="contenedor destino">
+      <div>
+        <TituloSeccion titulo="A dónde va el dinero" alineacion="izquierda" />
+        <p class="intro">
+          Cada año la asamblea de socios aprueba en qué se gasta. Estas son las partidas de siempre:
+        </p>
+        <ul class="lista-destinos">
+          {
+            destinos.map((d) => (
+              <li>
+                <Icono nombre="hoja" tamano={15} />
+                <span>{d}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="cuentas">
+          Las cuentas se presentan en la asamblea anual y cualquier socio puede pedirlas en{' '}
+          <a href={`mailto:${site.email}`}>{site.email}</a>.
+        </p>
+      </div>
+
+      <aside class="mejor panel-marco">
+        <Adorno tipo="ramo" class="ramo" />
+        <p class="mano">¿Quieres ayudar de verdad?</p>
+        <p>
+          Hacerte socio ayuda más que una donación puntual: nos permite saber con qué contamos y planificar el
+          año entero.
+        </p>
+        <a class="btn btn-verde" href="/socios/">
+          <Icono nombre="corazon" tamano={14} />
+          Hazte socio
+        </a>
+      </aside>
     </div>
   </section>
 </Base>
 
+<script>
+  // Copiar el Bizum y el IBAN. Si no hay JavaScript, el botón ni siquiera aparece
+  // y los datos se siguen pudiendo seleccionar a mano.
+  for (const boton of document.querySelectorAll<HTMLButtonElement>('[data-copiar]')) {
+    if (!navigator.clipboard) continue;
+    boton.hidden = false;
+    boton.addEventListener('click', async () => {
+      const texto = boton.dataset.copiar ?? '';
+      const etiqueta = boton.querySelector('span');
+      try {
+        await navigator.clipboard.writeText(texto);
+        if (etiqueta) etiqueta.textContent = '¡Copiado!';
+        boton.classList.add('hecho');
+        setTimeout(() => {
+          if (etiqueta) etiqueta.textContent = 'Copiar';
+          boton.classList.remove('hecho');
+        }, 2200);
+      } catch {
+        if (etiqueta) etiqueta.textContent = 'No se pudo copiar';
+      }
+    });
+  }
+</script>
+
 <style>
   .formas {
-    padding-top: 1rem;
-  }
-
-  .rejilla {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
-    gap: 1.25rem;
+    gap: clamp(1.25rem, 2.5vw, 1.85rem);
   }
 
-  .panel {
+  .forma {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
   }
 
-  .panel h2 {
-    font-size: var(--t-lg);
+  .destacada {
+    border-color: var(--terracota);
+    background: var(--terracota-velo);
   }
 
-  .panel > p:first-of-type {
+  .icono {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--verde-velo);
+    color: var(--verde-medio);
+    margin-bottom: 1rem;
+  }
+
+  .destacada .icono {
+    background: #fff;
+    color: var(--terracota);
+  }
+
+  .forma h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+
+  .que-es {
+    color: var(--tinta-media);
+    font-size: var(--t-sm);
+    line-height: 1.65;
     flex: 1;
-    color: var(--texto-suave);
-  }
-
-  .panel .btn {
-    align-self: flex-start;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1.15rem;
   }
 
   .dato {
-    font-size: var(--t-xl);
-    font-weight: 700;
-    color: var(--oro-claro);
-    margin-bottom: 0.5rem;
+    font-family: var(--serif);
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--terracota-osc);
+    margin: 0 0 0.6rem;
     user-select: all;
+    line-height: 1.2;
   }
 
-  .dato-iban {
-    font-size: var(--t-md);
-    word-break: break-all;
+  .iban {
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+    word-break: break-word;
+  }
+
+  .copiar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.9rem;
+    padding: 0.4rem 0.75rem;
+    background: transparent;
+    border: 1px solid var(--linea);
+    border-radius: 2px;
+    color: var(--tinta-media);
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 140ms ease, color 140ms ease;
+  }
+
+  .copiar:hover {
+    border-color: var(--verde-medio);
+    color: var(--verde-medio);
+  }
+
+  .copiar.hecho {
+    border-color: var(--verde-medio);
+    color: var(--verde-medio);
+    background: var(--verde-velo);
+  }
+
+  .forma .btn {
+    margin-bottom: 0.9rem;
   }
 
   .nota {
-    font-size: var(--t-sm);
-    color: var(--texto-suave);
     margin: 0;
+    font-size: var(--t-xs);
+    color: var(--tinta-suave);
+    line-height: 1.6;
+  }
+
+  /* ---------- A dónde va el dinero ---------- */
+
+  .destino {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 1fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+
+  .intro {
+    color: var(--tinta-media);
+    max-width: 52ch;
+  }
+
+  .lista-destinos {
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .lista-destinos li {
+    display: grid;
+    grid-template-columns: 1.1rem 1fr;
+    gap: 0.8rem;
+    align-items: start;
+    color: var(--tinta-media);
+  }
+
+  .lista-destinos :global(svg) {
+    color: var(--verde-claro);
+    margin-top: 0.42rem;
+  }
+
+  .cuentas {
+    margin: 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--linea);
+    font-size: var(--t-sm);
+    color: var(--tinta-suave);
+    max-width: 52ch;
+  }
+
+  .mejor {
+    position: relative;
+    overflow: hidden;
+    background: var(--papel);
+  }
+
+  .mejor :global(.ramo) {
+    position: absolute;
+    top: -1.25rem;
+    right: -1.5rem;
+    width: 4.5rem;
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .mejor .mano {
+    position: relative;
+    font-size: 1.75rem;
+    margin: 0 0 0.5rem;
+    color: var(--terracota);
+  }
+
+  .mejor p {
+    position: relative;
+    color: var(--tinta-media);
+    font-size: var(--t-sm);
+  }
+
+  .mejor .btn {
+    position: relative;
+  }
+
+  @media (max-width: 900px) {
+    .destino {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

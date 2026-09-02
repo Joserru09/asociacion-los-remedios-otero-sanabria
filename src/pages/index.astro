@@ -2,155 +2,184 @@
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import NoticiaItem from '../components/NoticiaItem.astro';
+import TituloSeccion from '../components/TituloSeccion.astro';
+import NoticiaCard from '../components/NoticiaCard.astro';
 import ProductoCard from '../components/ProductoCard.astro';
+import PanelSocio from '../components/PanelSocio.astro';
+import Adorno from '../components/Adorno.astro';
 import Redes from '../components/Redes.astro';
-import { site, pagos, redesActivas } from '../site.config';
+import Icono from '../components/Icono.astro';
+import { site, redesActivas, whatsappActivo } from '../site.config';
 import { galeria } from '../data/galeria';
-import { euros, fechaLarga } from '../utils/fecha';
 import hero from '../assets/hero.jpg';
 
 const noticias = (await getCollection('noticias')).sort(
   (a, b) => b.data.fecha.getTime() - a.data.fecha.getTime(),
 );
-const destacada = noticias.find((n) => n.data.destacada) ?? noticias[0];
-const ultimas = noticias.slice(0, 3);
+const destacadas = [...noticias].sort(
+  (a, b) => Number(b.data.destacada) - Number(a.data.destacada) || b.data.fecha.getTime() - a.data.fecha.getTime(),
+);
+const ultimas = destacadas.slice(0, 3);
 
 const productos = (await getCollection('productos'))
-  .filter((p) => !p.data.agotado)
-  .sort((a, b) => a.data.orden - b.data.orden)
-  .slice(0, 3);
+  .sort((a, b) => Number(a.data.agotado) - Number(b.data.agotado) || a.data.orden - b.data.orden)
+  .slice(0, 4);
 
 const fotos = import.meta.glob<{ default: ImageMetadata }>('../assets/galeria/*.{jpg,jpeg,png,webp}', {
   eager: true,
 });
-const muestra = galeria.slice(0, 3).map((g) => ({
+const muestra = galeria.slice(0, 6).map((g) => ({
   ...g,
   src: fotos[`../assets/galeria/${g.fichero}`].default,
 }));
+
+const canal = whatsappActivo();
 ---
 
 <Base titulo={site.nombre}>
+  {/* ---------------- Portada ---------------- */}
   <section class="hero">
     <Image
       src={hero}
       alt=""
-      width={1920}
-      height={1080}
+      width={2000}
+      widths={[640, 1100, 1600, 2000]}
+      sizes="100vw"
       loading="eager"
       fetchpriority="high"
-      class="hero-fondo"
+      class="hero-foto"
     />
     <div class="hero-velo" aria-hidden="true"></div>
-    <div class="contenedor hero-contenido">
-      <p class="hero-lugar">{site.comarca}</p>
-      <h1>Otero de Sanabria</h1>
-      <p class="hero-sub">
-        La asociación cultural del pueblo. Organizamos las fiestas, cuidamos lo común y contamos
-        aquí lo que pasa, para que te enteres aunque vivas lejos.
-      </p>
-      <div class="hero-acciones">
-        <a class="btn btn-primario" href="/novedades/">Ver novedades</a>
-        <a class="btn btn-secundario" href="/socios/">Hazte socio</a>
-      </div>
-    </div>
-  </section>
-
-  {destacada && (
-    <section class="destacada">
-      <div class="contenedor">
-        <a href={`/novedades/${destacada.id}/`} class="destacada-enlace">
-          <span class="meta">Lo último · {fechaLarga(destacada.data.fecha)}</span>
-          <span class="destacada-titulo">{destacada.data.titulo}</span>
+    <div class="contenedor hero-dentro">
+      <h1>Bienvenidos a<br />{site.pueblo}</h1>
+      <Adorno tipo="filete" class="hero-filete" />
+      <p class="hero-lema">{site.lema}</p>
+      <div class="hero-botones">
+        <a class="btn btn-terracota" href="/noticias/">
+          <Icono nombre="calendario" tamano={15} />
+          Ver novedades
+        </a>
+        <a class="btn btn-verde" href="/donaciones/">
+          <Icono nombre="manos" tamano={16} />
+          Colaborar
         </a>
       </div>
-    </section>
-  )}
-
-  <section class="seccion">
-    <div class="contenedor">
-      <div class="cabecera-seccion">
-        <h2>Tablón de novedades</h2>
-        <a href="/novedades/">Todas las novedades</a>
-      </div>
-      <div class="lista">
-        {ultimas.map((n) => <NoticiaItem noticia={n} />)}
-      </div>
     </div>
   </section>
 
-  <section class="seccion seccion-suave">
-    <div class="contenedor">
-      <div class="cabecera-seccion">
-        <h2>La tienda del pueblo</h2>
-        <a href="/tienda/">Ver toda la tienda</a>
-      </div>
-      <p class="intro">
-        Camisetas, sudaderas y pegatinas de Otero. Todo lo recaudado va a las actividades de la asociación.
-      </p>
-      <div class="rejilla-productos">
-        {productos.map((p) => <ProductoCard producto={p} compacto />)}
-      </div>
-    </div>
-  </section>
-
-  <section class="seccion">
-    <div class="contenedor">
-      <div class="cabecera-seccion">
-        <h2>Fotos</h2>
-        <a href="/galeria/">Ver la galería</a>
-      </div>
-      <div class="mosaico">
-        {muestra.map((f) => (
-          <a href="/galeria/" class="mosaico-item">
-            <Image src={f.src} alt={f.pie} width={900} height={700} loading="lazy" />
-            <span class="pie-foto">{f.pie}</span>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="seccion seccion-suave apoya">
-    <div class="contenedor apoya-grid">
-      <div class="panel">
-        <h2>Hazte socio</h2>
-        <p>
-          Por {euros(pagos.cuotaSocioEuros)} al año mantienes vivas las fiestas y las actividades, y decides en la asamblea.
+  {/* ---------------- Tablón de novedades + hazte socio ---------------- */}
+  <section class="seccion tablon-seccion">
+    <div class="contenedor tablon-rejilla">
+      <div class="tablon">
+        <TituloSeccion titulo="Tablón de novedades" />
+        <div class="tablon-cartas">
+          {ultimas.map((n) => <NoticiaCard noticia={n} />)}
+        </div>
+        <p class="tablon-pie">
+          <a href="/noticias/" class="enlace-flecha">Todas las noticias</a>
         </p>
-        <a class="btn btn-primario" href="/socios/">Cómo hacerse socio</a>
       </div>
-      <div class="panel">
-        <h2>Echa una mano</h2>
-        <p>Una donación puntual, por Bizum, tarjeta o transferencia, para lo que haga falta este año.</p>
-        <a class="btn btn-secundario" href="/donaciones/">Donar</a>
+      <PanelSocio />
+    </div>
+  </section>
+
+  {/* ---------------- Tienda solidaria | Galería ---------------- */}
+  <section class="dos-mitades">
+    <div class="mitad mitad-tienda">
+      <div class="dentro">
+        <TituloSeccion
+          titulo="Tienda solidaria"
+          entradilla="Cada compra ayuda a financiar nuestras actividades."
+        />
+        <div class="productos">
+          {productos.map((p) => <ProductoCard producto={p} compacto />)}
+        </div>
+        <div class="centrar">
+          <a class="btn btn-linea" href="/tienda/">
+            Ver todos los productos
+            <Icono nombre="bolsa" tamano={14} />
+          </a>
+        </div>
       </div>
-      <div class="panel">
-        <h2>Síguenos</h2>
-        {redesActivas().length > 0 ? (
-          <>
-            <p>Las fotos del día a día y los avisos rápidos están en las redes del pueblo.</p>
-            <Redes />
-          </>
-        ) : (
-          <p>Escríbenos a <a href={`mailto:${site.email}`}>{site.email}</a> y te avisamos de todo.</p>
-        )}
+    </div>
+
+    <div class="mitad mitad-galeria">
+      <div class="dentro">
+        <TituloSeccion titulo="Galería" />
+        <div class="mosaico">
+          {
+            muestra.map((f) => (
+              <a href="/galeria/" class="mosaico-foto" aria-label={`Galería: ${f.pie}`}>
+                <Image
+                  src={f.src}
+                  alt={f.pie}
+                  width={600}
+                  widths={[280, 600]}
+                  sizes="(max-width: 700px) 30vw, 15rem"
+                  loading="lazy"
+                />
+              </a>
+            ))
+          }
+        </div>
+        <div class="centrar">
+          <a href="/galeria/" class="enlace-flecha">Ver más fotos</a>
+        </div>
+        <Adorno tipo="iglesia" class="iglesia-galeria" />
       </div>
     </div>
   </section>
+
+  {/* ---------------- Redes | WhatsApp ---------------- */}
+  {
+    (redesActivas().length > 0 || canal) && (
+      <section class="seccion-calida comunidad">
+        <Adorno tipo="iglesia" class="iglesia-comunidad" />
+        <div class="contenedor comunidad-rejilla">
+          {redesActivas().length > 0 && (
+            <div class="bloque">
+              <h2 class="titulo-bloque">Redes sociales</h2>
+              <p>Síguenos y mantente al día de todo lo que ocurre en {site.pueblo}.</p>
+              <Redes class="redes-portada" />
+            </div>
+          )}
+
+          {redesActivas().length > 0 && canal && <Adorno tipo="ramo" class="ramo-comunidad" />}
+
+          {canal && (
+            <div class="bloque">
+              <h2 class="titulo-bloque">
+                <span class="circulo-whatsapp">
+                  <Icono nombre="whatsapp" tamano={22} />
+                </span>
+                WhatsApp comunidad
+              </h2>
+              <p>Únete a nuestro canal de WhatsApp y recibe avisos, actividades, novedades y mucho más.</p>
+              <a class="btn btn-verde" href={canal} target="_blank" rel="noopener">
+                <Icono nombre="whatsapp" tamano={15} />
+                Unirme al canal
+              </a>
+            </div>
+          )}
+        </div>
+      </section>
+    )
+  }
 </Base>
 
 <style>
-  /* Portada: foto a sangre con velo oscuro y titular serif encima */
+  /* ---------------- Portada ---------------- */
+
   .hero {
     position: relative;
     display: grid;
-    align-items: end;
-    min-height: min(78vh, 44rem);
+    align-items: center;
+    min-height: clamp(23rem, 54vh, 33rem);
     overflow: hidden;
+    background: var(--verde);
   }
 
-  .hero-fondo {
+  .hero :global(.hero-foto) {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -162,141 +191,238 @@ const muestra = galeria.slice(0, 3).map((g) => ({
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(to bottom, rgba(18, 22, 30, 0.55) 0%, rgba(18, 22, 30, 0.25) 40%, rgba(18, 22, 30, 0.92) 100%),
-      linear-gradient(to top, var(--fondo) 0%, transparent 30%);
+      linear-gradient(
+        100deg,
+        rgba(31, 38, 21, 0.85) 0%,
+        rgba(31, 38, 21, 0.62) 32%,
+        rgba(31, 38, 21, 0.2) 58%,
+        rgba(31, 38, 21, 0.02) 78%
+      ),
+      linear-gradient(to top, rgba(31, 38, 21, 0.4), transparent 45%);
   }
 
-  .hero-contenido {
+  .hero-dentro {
     position: relative;
-    padding-block: 4rem 3.5rem;
-  }
-
-  .hero-lugar {
-    color: var(--oro-claro);
-    font-size: var(--t-sm);
-    letter-spacing: 0.04em;
-    margin-bottom: 0.75rem;
+    padding-block: clamp(3rem, 7vw, 4.5rem);
+    max-width: min(var(--ancho), 100% - 2 * var(--margen));
   }
 
   .hero h1 {
+    margin: 0;
+    color: #fff;
     font-size: var(--t-hero);
-    margin-bottom: 1rem;
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: 0.005em;
+    text-shadow: 0 2px 24px rgba(20, 26, 12, 0.4);
   }
 
-  .hero-sub {
-    font-size: var(--t-md);
-    max-width: 44ch;
-    color: var(--texto);
+  .hero :global(.hero-filete) {
+    margin: 1.1rem 0 1.35rem;
+    width: min(240px, 80%);
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .hero-lema {
+    max-width: 26ch;
+    margin: 0 0 1.85rem;
+    color: rgba(255, 255, 255, 0.94);
+    font-size: clamp(1.02rem, 1.9vw, 1.2rem);
+    line-height: 1.5;
+    text-shadow: 0 1px 14px rgba(20, 26, 12, 0.45);
+  }
+
+  .hero-botones {
+    display: flex;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+  }
+
+  /* ---------------- Tablón ---------------- */
+
+  .tablon-seccion {
+    background: var(--crema);
+  }
+
+  .tablon-rejilla {
+    display: grid;
+    grid-template-columns: minmax(0, 2.15fr) minmax(17rem, 1fr);
+    gap: clamp(1.75rem, 3.5vw, 3rem);
+    align-items: stretch;
+  }
+
+  .tablon {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tablon-cartas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13.5rem, 1fr));
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .tablon-pie {
+    margin: 1.5rem 0 0;
+    text-align: center;
+  }
+
+  @media (max-width: 1000px) {
+    .tablon-rejilla {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------------- Dos mitades: tienda y galería ---------------- */
+
+  .dos-mitades {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(26rem, 100%), 1fr));
+  }
+
+  .mitad {
+    display: flex;
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .mitad-tienda {
+    background: var(--crema-3);
+    justify-content: flex-end;
+  }
+
+  .mitad-galeria {
+    background: var(--crema);
+    justify-content: flex-start;
+  }
+
+  .dentro {
+    position: relative;
+    width: 100%;
+    max-width: calc(var(--ancho) / 2);
+    padding-inline: clamp(1.25rem, 3.5vw, 3rem);
+  }
+
+  .productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(6.5rem, 100%), 1fr));
+    gap: clamp(0.75rem, 1.6vw, 1.15rem);
     margin-bottom: 1.75rem;
   }
 
-  .hero-acciones {
+  .centrar {
     display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-  }
-
-  /* Franja de lo último */
-  .destacada {
-    border-bottom: 1px solid var(--linea);
-  }
-
-  .destacada-enlace {
-    display: flex;
-    align-items: baseline;
-    gap: 1.25rem;
-    flex-wrap: wrap;
-    padding-block: 1.1rem;
-    text-decoration: none;
-  }
-
-  .destacada-titulo {
-    color: var(--tinta);
-    font-weight: 600;
-  }
-
-  .destacada-enlace:hover .destacada-titulo {
-    color: var(--oro-claro);
-  }
-
-  /* Secciones */
-  .intro {
-    max-width: 52ch;
-    color: var(--texto-suave);
-    margin-top: -1rem;
-    margin-bottom: 2rem;
-  }
-
-  .rejilla-productos {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    justify-content: center;
   }
 
   .mosaico {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
   }
 
-  .mosaico-item {
-    position: relative;
+  .mosaico-foto {
     display: block;
-    border-radius: var(--radio);
+    aspect-ratio: 4 / 3;
+    border-radius: 3px;
     overflow: hidden;
     border: 1px solid var(--linea);
-    aspect-ratio: 4 / 3;
+    background: var(--crema-3);
   }
 
-  .mosaico-item img {
+  .mosaico-foto :global(img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 400ms ease;
   }
 
-  .pie-foto {
+  .mosaico-foto:hover :global(img) {
+    transform: scale(1.05);
+  }
+
+  .mitad :global(.iglesia-galeria) {
     position: absolute;
-    inset: auto 0 0 0;
-    padding: 1.5rem 1rem 0.75rem;
-    background: linear-gradient(to top, rgba(13, 17, 23, 0.85), transparent);
-    color: var(--texto);
+    right: clamp(0.5rem, 2vw, 1.5rem);
+    bottom: -2.75rem;
+    width: 8.5rem;
+    opacity: 0.32;
+    pointer-events: none;
+  }
+
+  /* ---------------- Comunidad ---------------- */
+
+  .comunidad {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(2.5rem, 5vw, 3.75rem);
+    border-top: 1px solid var(--linea);
+  }
+
+  .comunidad :global(.iglesia-comunidad) {
+    position: absolute;
+    right: 2%;
+    bottom: -1.5rem;
+    width: 11rem;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .comunidad-rejilla {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: clamp(1.75rem, 4vw, 3.5rem);
+  }
+
+  .bloque p {
+    color: var(--tinta-media);
+    max-width: 42ch;
+    margin-bottom: 1.35rem;
     font-size: var(--t-sm);
   }
 
-  /* Apoya */
-  .apoya-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
-  }
-
-  .panel {
+  .titulo-bloque {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 0 0.65rem;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(1.25rem, 2.4vw, 1.7rem);
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
   }
 
-  .panel p {
-    flex: 1;
-    color: var(--texto-suave);
+  .circulo-whatsapp {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #25d366;
+    color: #fff;
+    flex: none;
   }
 
-  .panel .btn {
-    align-self: flex-start;
+  .comunidad :global(.ramo-comunidad) {
+    width: 3.5rem;
+    opacity: 0.55;
+    justify-self: center;
   }
 
   @media (max-width: 900px) {
-    .hero {
-      min-height: 70vh;
-    }
-
-    .rejilla-productos,
-    .apoya-grid,
-    .mosaico {
+    .comunidad-rejilla {
       grid-template-columns: 1fr;
     }
 
-    .mosaico-item {
-      aspect-ratio: 16 / 10;
+    .comunidad :global(.ramo-comunidad) {
+      display: none;
+    }
+
+    .comunidad :global(.iglesia-comunidad) {
+      opacity: 0.16;
     }
   }
 </style>
